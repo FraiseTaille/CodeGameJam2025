@@ -1,6 +1,9 @@
 package fr.bloomyindev.cgj2024;
 
+import fr.bloomyindev.cgj2024.CoordinateSystems.*;
+
 public class Spaceship {
+    private AbsoluteCoords3D spaceshipCord;
     private float latitude;
     private float longitude;
     private float speed;
@@ -37,6 +40,10 @@ public class Spaceship {
                 this.latitude += i;
             }
         }
+    }
+
+    public void increaseSpeed(float speed) {
+        this.speed += speed;
     }
 }
 
