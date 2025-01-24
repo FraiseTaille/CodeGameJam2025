@@ -3,37 +3,37 @@ package fr.bloomyindev.cgj2024;
 public class Spaceship {
     private float latitude;
     private float longitude;
-    private int distance;
+    private float speed;
 
     public Spaceship(float latitude, float longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.distance = 0;
+        this.speed = 0;
     }
 
-    public int getDistance() {
-        return distance;
+    public float getSpeed() {
+        return speed;
     }
 
-    public void rotateLongitude(float longitude) {
-        if (this.longitude < longitude) {
-            for (float i = this.longitude; i < longitude; i++) {
+    public void rotateLongitude(float number) {
+        if (number > 0) {
+            for (float i = 0; i < number; i++) {
                 this.longitude += i;
             }
         } else {
-            for (float i = this.longitude; i > longitude; i--) {
+            for (float i = number ; i > 0; i--) {
                 this.longitude += i;
             }
         }
     }
 
-    public void rotateLatitude(float latitude) {
-        if (this.latitude < latitude) {
-            for (float i = this.latitude; i < latitude; i++) {
+    public void rotateLatitude(float number) {
+        if (number > 0) {
+            for (float i = 0; i < number; i++) {
                 this.latitude += i;
             }
         } else {
-            for (float i = this.latitude; i > latitude; i--) {
+            for (float i = number; i > 0; i--) {
                 this.latitude += i;
             }
         }
