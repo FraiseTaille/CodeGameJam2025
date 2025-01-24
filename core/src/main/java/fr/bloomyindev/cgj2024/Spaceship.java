@@ -20,25 +20,21 @@ public class Spaceship {
     }
 
     public void rotateLongitude(float number) {
-        if (number > 0) {
-            for (float i = 0; i < number; i++) {
-                this.longitude += i;
-            }
-        } else {
-            for (float i = number ; i <= 0; i++) {
-                this.longitude += i;
-            }
-        }
+        rotate(this.longitude, number);
     }
 
     public void rotateLatitude(float number) {
+        rotate(this.latitude, number);
+    }
+
+    private void rotate(float axe, float number) {
         if (number > 0) {
             for (float i = 0; i < number; i++) {
-                this.latitude += i;
+                axe += i;
             }
         } else {
-            for (float i = number; i > 0; i--) {
-                this.latitude += i;
+            for (float i = number ; i <= 0; i++) {
+                axe += i;
             }
         }
     }
