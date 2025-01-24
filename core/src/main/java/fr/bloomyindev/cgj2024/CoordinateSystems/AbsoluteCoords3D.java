@@ -12,4 +12,15 @@ public class AbsoluteCoords3D {
 	public float[] getCoords() {
 		return new float[]{this.x, this.y, this.z};
 	}
+
+	public float[] getDelta(AbsoluteCoords3D other) {
+		float DeltaX, DeltaY, DeltaZ;
+		float[] otherCoords = other.getCoords();
+
+		DeltaX = otherCoords[0] - this.x;
+		DeltaY = otherCoords[1] - this.y;
+		DeltaZ = otherCoords[0] - this.z;
+
+		return new float[]{DeltaX, DeltaY, DeltaZ};
+	}
 }
