@@ -34,8 +34,6 @@ public class FieldOfViewCoords {
 			this.X = DeltaLng;
 			this.Y = DeltaLat;
 
-			System.out.printf("RelX=%f RelY=%f RelZ=%f | Lat=%f Lng=%f \n", objRelativeCoords.getRelX(), objRelativeCoords.getRelY(), objRelativeCoords.getRelZ(), objCoords[1], objCoords[0]);
-
 			this.normalisedX = X / (0.5f * fovX);
 			this.normalisedY = Y / (0.5f * fovY);
 		}

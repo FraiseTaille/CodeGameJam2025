@@ -2,7 +2,6 @@ package fr.bloomyindev.cgj2024;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 
@@ -49,7 +48,5 @@ public class Star {
     public void computeAngularSize(long distance, float fovAngleX) {
         angularSize = 2 * (float) Math.asin((float) (2 * (float)absoluteRadius / distance));
         angularSize /= fovAngleX; // Pour convertir en format normalisé
-
-        //System.out.printf("AngSize = %f, dist = %d\n", angularSize, distance);
     }
 }
