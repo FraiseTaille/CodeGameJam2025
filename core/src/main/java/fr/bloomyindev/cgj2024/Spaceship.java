@@ -25,7 +25,7 @@ public class Spaceship {
                 this.longitude += i;
             }
         } else {
-            for (float i = number ; i > 0; i--) {
+            for (float i = number ; i <= 0; i++) {
                 this.longitude += i;
             }
         }
