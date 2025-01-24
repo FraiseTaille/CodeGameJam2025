@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import fr.bloomyindev.cgj2024.Main;
-import fr.bloomyindev.cgj2024.SoundManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -21,13 +20,13 @@ public class MainMenuScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
 
         game.viewport.apply();
-        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
+        game.sprite.setProjectionMatrix(game.viewport.getCamera().combined);
 
-        game.batch.begin();
+        game.sprite.begin();
         // draw text. Remember that x and y are in meters
-        game.font.draw(game.batch, "Welcome to the game!!! ", 1, 1.5f);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 1, 1);
-        game.batch.end();
+        game.font.draw(game.sprite, "Welcome to the game!!! ", 1, 1.5f);
+        game.font.draw(game.sprite, "Tap anywhere to begin!", 1, 1);
+        game.sprite.end();
 
         if (Gdx.input.isTouched()) {
             game.setScreen(new GameScreen(game));

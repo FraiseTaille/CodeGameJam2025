@@ -1,12 +1,10 @@
 package fr.bloomyindev.cgj2024;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.AudioDevice;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import fr.bloomyindev.cgj2024.screen.MainMenuScreen;
@@ -14,13 +12,15 @@ import fr.bloomyindev.cgj2024.screen.MainMenuScreen;
 
 public class Main extends Game {
 
-    public SpriteBatch batch;
+    public SpriteBatch sprite;
+    public ShapeRenderer shape;
     public BitmapFont font;
     public FitViewport viewport;
     public SoundManager soundManager;
 
     public void create() {
-        batch = new SpriteBatch();
+        sprite = new SpriteBatch();
+        shape = new ShapeRenderer();
         // use libGDX's default font
         font = new BitmapFont();
         viewport = new FitViewport(16, 9);
@@ -40,7 +40,7 @@ public class Main extends Game {
     }
 
     public void dispose() {
-        batch.dispose();
+        sprite.dispose();
         font.dispose();
     }
 }

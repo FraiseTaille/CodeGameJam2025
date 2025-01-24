@@ -10,9 +10,15 @@ public class Star {
     private Sound sound;
     private Color color;
     private AbsoluteCoords3D coords;
-
     private float angularSize;
     private int absoluteRadius;
+
+    public Star(AbsoluteCoords3D coords, Color color, Sound sound) {
+        this.coords = coords;
+        this.color = color;
+        this.sound = sound;
+    }
+
 
     public Sound getSound() {
         return sound;
@@ -26,7 +32,11 @@ public class Star {
         return coords;
     }
 
-    public void render(ShapeRenderer shapeRenderer, int x, int y, int distance, float fovAngleX) {
+
+    /*
+    * Please use `ShapeRenderer.begin()` before using this method
+    */
+    public void render(ShapeRenderer shapeRenderer, float x, float y, int distance, float fovAngleX) {
         float renderSize;
 
         renderSize = angularSize * (16 / fovAngleX);

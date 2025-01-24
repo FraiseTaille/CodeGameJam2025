@@ -9,6 +9,7 @@ public class FieldOfViewCoords {
 
 	public FieldOfViewCoords(FieldOfView FOV, SpaceshipRelative objRelativeCoords) {
 		this.FOV = FOV;
+        reComputeFOVCoords(objRelativeCoords);
 	}
 
 	public void reComputeFOVCoords(SpaceshipRelative objRelativeCoords) {
