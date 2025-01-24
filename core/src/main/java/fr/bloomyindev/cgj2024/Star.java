@@ -24,7 +24,7 @@ public class Star {
     }
 
     public void render(ShapeRenderer shapeRenderer, int x, int y, int distance) {
-    shapeRenderer.setColor(color);
-    shapeRenderer.circle(x, y, 10);
+        shapeRenderer.setColor(color);
+        shapeRenderer.circle(x, y, 10);
     }
 }
