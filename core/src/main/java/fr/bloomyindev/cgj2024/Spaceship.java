@@ -8,7 +8,8 @@ public class Spaceship {
     private float longitude;
     private float speed;
 
-    public Spaceship(float latitude, float longitude) {
+    public Spaceship(AbsoluteCoords3D spaceshipCord,float latitude, float longitude) {
+        this.spaceshipCord = spaceshipCord;
         this.latitude = latitude;
         this.longitude = longitude;
         this.speed = 0;
