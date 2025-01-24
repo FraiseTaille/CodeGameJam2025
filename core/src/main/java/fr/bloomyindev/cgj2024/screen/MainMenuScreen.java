@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import fr.bloomyindev.cgj2024.Main;
+import fr.bloomyindev.cgj2024.SoundManager;
 
 public class MainMenuScreen implements Screen {
 
