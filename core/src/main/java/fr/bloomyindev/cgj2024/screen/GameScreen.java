@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.Q))  {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))  {
             spaceship.rotateLongitude(-0.17f*delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
 
@@ -97,6 +97,7 @@ public class GameScreen implements Screen {
     private void logic() {
         for (int i = 0; i < starsCoords.size(); i++) {
             starsCoords.get(i).reComputeFOVCoords(spaceshipRelativeToStars.get(i));
+            spaceshipRelativeToStars.get(i).reComputeRelativeCoords(spaceship.getSpaceshipCoord());
             stars.get(i).computeAngularSize(spaceshipRelativeToStars.get(i).getDistance(), fov.getFovAngles()[0]);
         }
         orderToDrawStars.clear();
