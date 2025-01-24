@@ -73,13 +73,13 @@ public class GameScreen implements Screen {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            spaceship.rotateLongitude(-0.17f * delta);
-            fov.setCenter(spaceship.getLatitude(), spaceship.getLongitude());
+            spaceship.rotateLongitude(-0.17f*delta);
+            fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
             System.out.println("coucou");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            spaceship.rotateLongitude(0.17f * delta);
-            fov.setCenter(spaceship.getLatitude(), spaceship.getLongitude());
+            spaceship.rotateLongitude(0.17f*delta);
+            fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             spaceship.getSpaceshipCord().move(delta, spaceship.getLatitude(), spaceship.getLongitude());
@@ -122,8 +122,9 @@ public class GameScreen implements Screen {
         float worldWidth = game.viewport.getWorldWidth();
         float worldHeight = game.viewport.getWorldHeight();
 
-        cockpitSprite.draw(game.sprite);
-        game.font.draw(game.sprite, String.format("Long %f\nLat %f", spaceship.getLatitude(), spaceship.getLongitude()), 7f, 2.75f);
+
+       game.font.draw(game.sprite, String.format("Long %f, Lat %f", spaceship.getPitch(), spaceship.getYaw()), 1, 1);
+
 
         game.sprite.end();
     }
