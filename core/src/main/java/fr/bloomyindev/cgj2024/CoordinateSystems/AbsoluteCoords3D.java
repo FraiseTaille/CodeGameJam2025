@@ -33,4 +33,10 @@ public class AbsoluteCoords3D {
 		this.y += speedY;
 		this.z += speedZ;
 	}
+
+	public void setToOrigin() {
+		this.x = 0.f;
+		this.y = 0.f;
+		this.z = 0.f;
+	}
 }

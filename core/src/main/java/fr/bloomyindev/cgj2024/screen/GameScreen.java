@@ -54,8 +54,8 @@ public class GameScreen implements Screen {
 
     public void spawnStars() {
         stars.add(new Star(new AbsoluteCoords3D(0, 50, 0), Color.CYAN, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.RED, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(0, 25, 0), Color.GREEN, null, 1));
+        //stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.RED, null, 1));
+        //stars.add(new Star(new AbsoluteCoords3D(0, 25, 0), Color.GREEN, null, 1));
     }
 
     @Override
@@ -89,8 +89,13 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             spaceship.increaseSpeed(-delta);
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             spaceship.setSpeed(0);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            spaceship.getSpaceshipCoord().setToOrigin();
         }
     }
 
