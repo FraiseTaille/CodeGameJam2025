@@ -33,5 +33,14 @@ public class FieldOfView {
     public void setCenter(float latCenter, float lngCenter) {
         this.latCenter = latCenter;
         this.lngCenter = lngCenter;
+
+		this.latCenter += (float)Math.PI;
+		this.lngCenter += (float)Math.PI;
+
+		this.latCenter %= 2.f * (float)Math.PI;
+		this.lngCenter %= 2.f * (float)Math.PI;
+
+		this.latCenter -= (float)Math.PI;
+		this.lngCenter -= (float)Math.PI;
     }
 }
