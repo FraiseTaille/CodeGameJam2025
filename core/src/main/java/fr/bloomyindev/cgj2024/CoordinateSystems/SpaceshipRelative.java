@@ -26,4 +26,8 @@ public class SpaceshipRelative {
 		return this.distance;
 	}
 
+	public float[] getRelativeCartesian() {
+		return new float[]{this.xRel, this.yRel, this.zRel};
+	}
+
 }
