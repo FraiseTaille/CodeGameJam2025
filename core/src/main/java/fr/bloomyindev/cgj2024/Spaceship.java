@@ -28,14 +28,8 @@ public class Spaceship {
     }
 
     private void rotate(float axe, float number) {
-        if (number > 0) {
-            for (float i = 0; i < number; i++) {
-                axe += i;
-            }
-        } else {
-            for (float i = number ; i <= 0; i++) {
-                axe += i;
-            }
+        for (float i = 0; i < Math.abs(number); i++) {
+            axe += number > 0 ? 1 : -1;
         }
     }
 
