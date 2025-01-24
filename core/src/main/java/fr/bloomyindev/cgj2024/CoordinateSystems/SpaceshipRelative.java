@@ -34,7 +34,12 @@ public class SpaceshipRelative {
 
 		this.distance = (int)Math.sqrt(Ut.pow(xRel, 2.0f) + Ut.pow(yRel, 2.0f) + Ut.pow(zRel, 2.0f)); // Distance de l'étoile au vaisseau
 
-		this.lat = (long)Math.asin(zRel / (float)distance);
-		this.lng = (long)Math.atan2(xRel / (float)distance, yRel / (float)distance);
+		if (distance > 0) {
+			this.lat = (long)Math.asin(zRel / (float)distance);
+			this.lng = (long)Math.atan2(xRel / (float)distance, yRel / (float)distance);
+		} else {
+			this.lat = 0;
+			this.lng = 0;
+		}
 	}
 }
