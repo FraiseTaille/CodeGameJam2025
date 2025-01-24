@@ -24,11 +24,7 @@ public class AbsoluteCoords3D {
 		return new float[]{DeltaX, DeltaY, DeltaZ};
 	}
 
-	public void move(float speed, float pitch, float yaw) {
-		float speedZ = (float)Math.sin(pitch) * speed;
-		float speedY = (float)Math.sin(yaw) * speed;
-		float speedX = (float)Math.cos(yaw) * speed;
-
+	public void move(float speedX, float speedY, float speedZ) {
 		this.x += speedX;
 		this.y += speedY;
 		this.z += speedZ;

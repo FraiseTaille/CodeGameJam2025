@@ -49,5 +49,7 @@ public class Star {
     public void computeAngularSize(long distance, float fovAngleX) {
         angularSize = 2 * (float) Math.asin((float) (2 * (float)absoluteRadius / distance));
         angularSize /= fovAngleX; // Pour convertir en format normalisé
+
+        System.out.printf("AngSize = %f, dist = %d\n", angularSize, distance);
     }
 }

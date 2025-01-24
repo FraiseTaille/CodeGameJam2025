@@ -9,7 +9,7 @@ public class Spaceship {
     private float yaw;
     private float speed;
 
-    public Spaceship(AbsoluteCoords3D spaceshipCoord,float pitch, float yaw) {
+    public Spaceship(AbsoluteCoords3D spaceshipCoord, float pitch, float yaw) {
         this.spaceshipCoord = spaceshipCoord;
         this.pitch = pitch;
         this.yaw = yaw;
@@ -29,22 +29,22 @@ public class Spaceship {
     }
 
     /*
-    * Lat = true, long = false
-    */
+     * Lat = true, long = false
+     */
     private void rotate(boolean dir, float number) {
         for (float i = 0; i < Math.abs(number); i++) {
             if (dir) {
                 this.pitch += number;
 
-                this.pitch += (float)Math.PI;
-                this.pitch %= 2.f * (float)Math.PI;
-                this.pitch -= (float)Math.PI;
+                this.pitch += (float) Math.PI;
+                this.pitch %= 2.f * (float) Math.PI;
+                this.pitch -= (float) Math.PI;
             } else {
                 this.yaw += number;
 
-                this.yaw += (float)Math.PI;
-                this.yaw %= 2.f * (float)Math.PI;
-                this.yaw -= (float)Math.PI;
+                this.yaw += (float) Math.PI;
+                this.yaw %= 2.f * (float) Math.PI;
+                this.yaw -= (float) Math.PI;
             }
         }
     }
@@ -61,16 +61,23 @@ public class Spaceship {
         return yaw;
     }
 
-    public void increaseSpeed(float delta) {
-        this.speed = MathUtils.clamp(delta+this.speed, -20, 20);
+    public void changeSpeed(float delta) {
+        this.speed = MathUtils.clamp(this.speed + delta, -20, 20);
     }
 
     public void move() {
-        this.spaceshipCoord.move(speed, this.pitch, this.yaw);
+        if (speed == 0) {
+            return;
+        }
+
+        float speedZ = (float) Math.sin(this.pitch) * this.speed;
+        float speedY = (float) Math.sin(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
+        float speedX = (float) Math.cos(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
+
+        this.spaceshipCoord.move(speedX, speedY, speedZ);
     }
 
     public void setSpeed(float speed) {
         this.speed = speed;
     }
 }
-
