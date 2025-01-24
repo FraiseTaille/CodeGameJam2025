@@ -21,6 +21,18 @@ public class SpaceshipRelative {
 		return new float[]{this.xRel, this.yRel, this.zRel};
 	}
 
+	public float getRelX() {
+		return this.xRel;
+	}
+
+	public float getRelY() {
+		return this.yRel;
+	}
+
+	public float getRelZ() {
+		return this.zRel;
+	}
+
 	public float[] getLatLong() {
 		return new float[]{this.lat, this.lng};
 	}
@@ -32,11 +44,11 @@ public class SpaceshipRelative {
 		this.yRel = Delta3D[1];
 		this.zRel = Delta3D[2];
 
-		this.distance = (int)Math.sqrt(Ut.pow(xRel, 2.0f) + Ut.pow(yRel, 2.0f) + Ut.pow(zRel, 2.0f)); // Distance de l'étoile au vaisseau
+		this.distance = (long)Math.sqrt(Ut.pow(xRel, 2.0f) + Ut.pow(yRel, 2.0f) + Ut.pow(zRel, 2.0f)); // Distance de l'étoile au vaisseau
 
 		if (distance != 0) {
-			this.lat = (long)Math.asin(zRel / (float)distance);
-			this.lng = (long)Math.atan2(xRel / (float)distance, yRel / (float)distance);
+			this.lat = (float)Math.asin(zRel / (float)distance);
+			this.lng = (float)Math.atan2(yRel / (float)distance, xRel / (float)distance);
 		} else {
 			this.lat = 0;
 			this.lng = 0;

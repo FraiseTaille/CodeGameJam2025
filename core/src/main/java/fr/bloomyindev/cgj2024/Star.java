@@ -43,13 +43,13 @@ public class Star {
         renderSize = angularSize * (16 / fovAngleX);
 
         shapeRenderer.setColor(color);
-        shapeRenderer.circle(x, y, renderSize, 32);
+        shapeRenderer.circle(x - renderSize, y - renderSize, renderSize, 64);
     }
 
     public void computeAngularSize(long distance, float fovAngleX) {
         angularSize = 2 * (float) Math.asin((float) (2 * (float)absoluteRadius / distance));
         angularSize /= fovAngleX; // Pour convertir en format normalisé
 
-        System.out.printf("AngSize = %f, dist = %d\n", angularSize, distance);
+        //System.out.printf("AngSize = %f, dist = %d\n", angularSize, distance);
     }
 }

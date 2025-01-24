@@ -9,7 +9,7 @@ public class FieldOfViewCoords {
 
 	public FieldOfViewCoords(FieldOfView FOV, SpaceshipRelative objRelativeCoords) {
 		this.FOV = FOV;
-        reComputeFOVCoords(objRelativeCoords);
+		reComputeFOVCoords(objRelativeCoords);
 	}
 
 	public void reComputeFOVCoords(SpaceshipRelative objRelativeCoords) {
@@ -27,21 +27,14 @@ public class FieldOfViewCoords {
 		DeltaLat = objCoords[0] - fovCoords[0];
 		DeltaLng = objCoords[1] - fovCoords[1];
 
-		this.isVisible = Math.sqrt((double)(DeltaLat * DeltaLat)) < (fovY / 2.0f);
-		this.isVisible &= Math.sqrt((double)(DeltaLng * DeltaLng)) < (fovX / 2.0f);
+		this.isVisible = ((fovCoords[0] + fovX / 2.f) >= objCoords[0]) && (objCoords[0] >= (fovCoords[0] - fovX / 2.f)) &&
+						((fovCoords[1] + fovY / 2.f) >= objCoords[1]) && (objCoords[1] >= (fovCoords[1] - fovY / 2.f));
 
 		if (this.isVisible) {
-			DeltaLat += (float)Math.PI;
-			DeltaLng += (float)Math.PI;
-
-			DeltaLat %= 2.f * (float)Math.PI;
-			DeltaLng %= 2.f * (float)Math.PI;
-
-			DeltaLat -= (float)Math.PI;
-			DeltaLng -= (float)Math.PI;
-
 			this.X = DeltaLng;
 			this.Y = DeltaLat;
+
+			System.out.printf("RelX=%f RelY=%f RelZ=%f | Lat=%f Lng=%f \n", objRelativeCoords.getRelX(), objRelativeCoords.getRelY(), objRelativeCoords.getRelZ(), objCoords[1], objCoords[0]);
 
 			this.normalisedX = X / (0.5f * fovX);
 			this.normalisedY = Y / (0.5f * fovY);

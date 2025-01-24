@@ -20,11 +20,11 @@ public class Spaceship {
         return speed;
     }
 
-    public void rotateLongitude(float number) {
+    public void rotateYaw(float number) {
         rotate(false, number);
     }
 
-    public void rotateLatitude(float number) {
+    public void rotatePitch(float number) {
         rotate(true, number);
     }
 

@@ -24,6 +24,7 @@ public class GameScreen implements Screen {
     private ArrayList<FieldOfViewCoords> starsCoords;
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
+    private float fovAngle = 70.0f * (float) (Math.PI / 180.0);
     private ArrayList<Integer> orderToDrawStars;
     private Texture cockpitTexture;
     private Sprite cockpitSprite;
@@ -31,31 +32,34 @@ public class GameScreen implements Screen {
     public GameScreen(final Main game) {
         this.game = game;
 
-        spaceship = new Spaceship(new AbsoluteCoords3D(4, 2, 1), 0, 0);
-        fov = new FieldOfView(0, 0, 1.2217f);
+        spaceship = new Spaceship(new AbsoluteCoords3D(0, 0, 0), 0, 0);
+        fov = new FieldOfView(0, 0, fovAngle);
 
         stars = new ArrayList<Star>();
         starsCoords = new ArrayList<FieldOfViewCoords>();
         spaceshipRelativeToStars = new ArrayList<SpaceshipRelative>();
+
         orderToDrawStars = new ArrayList<Integer>();
+
         cockpitTexture = new Texture(Gdx.files.internal("cockpit.png"));
         cockpitSprite = new Sprite(cockpitTexture);
 
-        cockpitSprite.setSize(16f,9f);
+        cockpitSprite.setSize(16f, 9f);
 
         spawnStars();
 
         for (Star star : stars) {
             spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-            starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+            starsCoords
+                    .add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
         }
     }
 
     public void spawnStars() {
-        //stars.add(new Star(new AbsoluteCoords3D(0, 50, 0), Color.CYAN, null, 1));
-        //stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.RED, null, 1));
-        //stars.add(new Star(new AbsoluteCoords3D(0, 25, 0), Color.GREEN, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(5, 10, 3), Color.YELLOW, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.CYAN, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(-50, 0, 0), Color.RED, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(0, 50, 0), Color.GREEN, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(0, -50, 0), Color.YELLOW, null, 1));
     }
 
     @Override
@@ -72,22 +76,23 @@ public class GameScreen implements Screen {
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))  {
-            spaceship.rotateLongitude(-0.17f*delta);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            spaceship.rotateYaw(-10.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
+        }
 
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            spaceship.rotateLongitude(0.17f*delta);
+            spaceship.rotateYaw(10.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             System.out.printf("speed %f\n", spaceship.getSpeed());
-            spaceship.changeSpeed(0.01f);
-
+            spaceship.changeSpeed(-1f * delta);
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            spaceship.changeSpeed(-0.01f);
+            spaceship.changeSpeed(1f * delta);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -100,18 +105,26 @@ public class GameScreen implements Screen {
     }
 
     private void logic() {
+        spaceship.move();
+
         for (int i = 0; i < starsCoords.size(); i++) {
-            spaceshipRelativeToStars.get(i).reComputeRelativeCoords(spaceship.getSpaceshipCoord());
-            starsCoords.get(i).reComputeFOVCoords(spaceshipRelativeToStars.get(i));
-            stars.get(i).computeAngularSize(spaceshipRelativeToStars.get(i).getDistance(), fov.getFovAngles()[0]);
+            SpaceshipRelative relCoords = spaceshipRelativeToStars.get(i);
+            relCoords.reComputeRelativeCoords(spaceship.getSpaceshipCoord());
+            spaceshipRelativeToStars.set(i, relCoords);
+
+            FieldOfViewCoords FOVCoords = starsCoords.get(i);
+            FOVCoords.reComputeFOVCoords(relCoords);
+            starsCoords.set(i, FOVCoords);
+
+            Star star = stars.get(i);
+            star.computeAngularSize(relCoords.getDistance(), fovAngle);
+            stars.set(i, star);
         }
 
         orderToDrawStars.clear();
         for (int i = 0; i < spaceshipRelativeToStars.size(); i++) {
             orderToDrawStars.add(i);
         }
-
-        spaceship.move();
     }
 
     private void draw() {
@@ -125,13 +138,19 @@ public class GameScreen implements Screen {
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (int i = 0; i < stars.size(); i++) {
-            float[] normalisedCoords = starsCoords.get(i).getNormalisedCoords();
+        for (int i = 0; i < orderToDrawStars.size(); i++) {
+            int j = orderToDrawStars.get(i);
+            FieldOfViewCoords starFOVCoords = starsCoords.get(j);
+            float[] normalisedCoords = starFOVCoords.getNormalisedCoords();
+
             normalisedCoords[0] = (normalisedCoords[0] + 1) * 8f;
             normalisedCoords[1] = (normalisedCoords[1] + 1) * 4.5f;
 
-            if (starsCoords.get(i).getVisibility()) {
-                stars.get(i).render(game.shape, normalisedCoords[0], normalisedCoords[1], spaceshipRelativeToStars.get(i).getDistance(), fov.getFovAngles()[0]);
+            if (starFOVCoords.getVisibility()) {
+                Star star = stars.get(j);
+                SpaceshipRelative relCoords = spaceshipRelativeToStars.get(j);
+
+                star.render(game.shape, normalisedCoords[0], normalisedCoords[1], relCoords.getDistance(), fovAngle);
             }
         }
 
@@ -142,11 +161,11 @@ public class GameScreen implements Screen {
         float worldHeight = game.viewport.getWorldHeight();
 
         cockpitSprite.draw(game.sprite);
-        game.font.draw(game.sprite, String.format("Yaw %f\nPitch %f", spaceship.getYaw(), spaceship.getPitch()), 7.5f, 2.75f);
+        game.font.draw(game.sprite, String.format("Yaw %f\nPitch %f", spaceship.getYaw(), spaceship.getPitch()), 7.5f,
+                2.75f);
 
         float[] coords = spaceship.getSpaceshipCoord().getCoords();
-        game.font.draw(game.sprite, String.format("Coords %f %f %f", coords[0],  coords[1],  coords[2]), 1f, 1f);
-
+        game.font.draw(game.sprite, String.format("Coords %f %f %f", coords[0], coords[1], coords[2]), 1f, 1f);
 
         game.sprite.end();
     }

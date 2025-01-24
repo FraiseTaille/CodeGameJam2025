@@ -17,9 +17,9 @@ public class AbsoluteCoords3D {
 		float DeltaX, DeltaY, DeltaZ;
 		float[] otherCoords = other.getCoords();
 
-		DeltaX = otherCoords[0] - this.x;
-		DeltaY = otherCoords[1] - this.y;
-		DeltaZ = otherCoords[2] - this.z;
+		DeltaX = - otherCoords[0] + this.x;
+		DeltaY = - otherCoords[1] + this.y;
+		DeltaZ = - otherCoords[2] + this.z;
 
 		return new float[]{DeltaX, DeltaY, DeltaZ};
 	}
