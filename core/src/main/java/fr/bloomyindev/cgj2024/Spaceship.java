@@ -35,8 +35,14 @@ public class Spaceship {
         for (float i = 0; i < Math.abs(number); i++) {
             if (dir) {
                 this.latitude += number;
+                this.latitude += (float)Math.PI;
+                this.latitude %= 2.f * (float)Math.PI;
+                this.latitude -= (float)Math.PI;
             } else {
                 this.longitude += number;
+                this.longitude += (float)Math.PI;
+                this.longitude %= 2.f * (float)Math.PI;
+                this.longitude -= (float)Math.PI;
             }
         }
     }
