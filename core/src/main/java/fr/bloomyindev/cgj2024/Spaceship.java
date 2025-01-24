@@ -42,6 +42,14 @@ public class Spaceship {
         }
     }
 
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
     public void increaseSpeed(float speed) {
         this.speed += speed;
     }
