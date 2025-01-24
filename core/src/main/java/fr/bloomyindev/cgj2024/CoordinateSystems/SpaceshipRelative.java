@@ -30,4 +30,7 @@ public class SpaceshipRelative {
 		return new float[]{this.xRel, this.yRel, this.zRel};
 	}
 
+	public float[] getLatLong() {
+		return new float[]{this.lat, this.lng};
+	}
 }
