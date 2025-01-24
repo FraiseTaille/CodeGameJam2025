@@ -72,21 +72,25 @@ public class GameScreen implements Screen {
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.Q))  {
             spaceship.rotateLongitude(-0.17f*delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             spaceship.rotateLongitude(0.17f*delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             System.out.printf("speed %f\n", spaceship.getSpeed());
             spaceship.increaseSpeed(1);
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             spaceship.increaseSpeed(-delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            spaceship.setSpeed(0);
         }
     }
 

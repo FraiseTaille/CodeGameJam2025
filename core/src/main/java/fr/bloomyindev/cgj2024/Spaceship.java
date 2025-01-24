@@ -68,5 +68,9 @@ public class Spaceship {
     public void move() {
         this.spaceshipCoord.move(speed, this.pitch, this.yaw);
     }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
 }
 
