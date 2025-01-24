@@ -21,4 +21,12 @@ public class FieldOfView {
 		this.BottomLeftCorner = new float[]{centerLng - this.fovAngleX, centerLat - this.fovAngleY};
 		this.BottomRightCorner = new float[]{centerLng + this.fovAngleX, centerLat - this.fovAngleY};
 	}
+
+	public float[] getCenterCoords() {
+		return new float[]{latCenter, lngCenter};
+	}
+
+	public float[] getFovAngles() {
+		return new float[]{fovAngleX, fovAngleY};
+	}
 }
