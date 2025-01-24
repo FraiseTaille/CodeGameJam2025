@@ -21,4 +21,9 @@ public class SpaceshipRelative {
 		this.lat = (long)Math.asin(zRel / (float)distance);
 		this.lng = (long)Math.atan2(xRel / (float)distance, yRel / (float)distance);
 	}
+
+	public long getDistance() {
+		return this.distance;
+	}
+
 }
