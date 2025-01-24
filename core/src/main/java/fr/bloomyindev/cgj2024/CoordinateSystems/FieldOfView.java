@@ -29,4 +29,9 @@ public class FieldOfView {
 	public float[] getFovAngles() {
 		return new float[]{fovAngleX, fovAngleY};
 	}
+
+    public void setCenter(float latCenter, float lngCenter) {
+        this.latCenter = latCenter;
+        this.lngCenter = lngCenter;
+    }
 }

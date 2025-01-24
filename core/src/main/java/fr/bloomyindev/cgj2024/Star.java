@@ -13,10 +13,11 @@ public class Star {
     private float angularSize;
     private int absoluteRadius;
 
-    public Star(AbsoluteCoords3D coords, Color color, Sound sound) {
+    public Star(AbsoluteCoords3D coords, Color color, Sound sound, int absoluteRadius) {
         this.coords = coords;
         this.color = color;
         this.sound = sound;
+        this.absoluteRadius = absoluteRadius;
     }
 
 
@@ -36,17 +37,17 @@ public class Star {
     /*
     * Please use `ShapeRenderer.begin()` before using this method
     */
-    public void render(ShapeRenderer shapeRenderer, float x, float y, int distance, float fovAngleX) {
+    public void render(ShapeRenderer shapeRenderer, float x, float y, long distance, float fovAngleX) {
         float renderSize;
 
         renderSize = angularSize * (16 / fovAngleX);
 
         shapeRenderer.setColor(color);
-        shapeRenderer.circle(x, y, renderSize);
+        shapeRenderer.circle(x, y, renderSize, 32);
     }
 
     public void computeAngularSize(long distance, float fovAngleX) {
-        angularSize = 2 * (float) Math.asin((float) (2 * this.absoluteRadius / distance));
+        angularSize = 2 * (float) Math.asin((float) (2 * (float)absoluteRadius / distance));
         angularSize /= fovAngleX; // Pour convertir en format normalisé
     }
 }

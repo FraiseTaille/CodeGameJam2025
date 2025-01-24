@@ -1,5 +1,6 @@
 package fr.bloomyindev.cgj2024;
 
+import com.badlogic.gdx.math.MathUtils;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 
 public class Spaceship {
@@ -20,16 +21,23 @@ public class Spaceship {
     }
 
     public void rotateLongitude(float number) {
-        rotate(this.longitude, number);
+        rotate(false, number);
     }
 
     public void rotateLatitude(float number) {
-        rotate(this.latitude, number);
+        rotate(true, number);
     }
 
-    private void rotate(float axe, float number) {
+    /*
+    * Lat = true, long = false
+    */
+    private void rotate(boolean dir, float number) {
         for (float i = 0; i < Math.abs(number); i++) {
-            axe += number > 0 ? 1 : -1;
+            if (dir) {
+                this.latitude += number;
+            } else {
+                this.longitude += number;
+            }
         }
     }
 
@@ -46,7 +54,7 @@ public class Spaceship {
     }
 
     public void increaseSpeed(float speed) {
-        this.speed += speed;
+        this.speed = MathUtils.clamp(speed+this.speed, 0, 20);
     }
 }
 
