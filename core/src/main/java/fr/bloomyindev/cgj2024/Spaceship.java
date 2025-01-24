@@ -43,6 +43,10 @@ public class Spaceship {
         }
     }
 
+    public AbsoluteCoords3D getSpaceshipCord() {
+        return spaceshipCord;
+    }
+
     public float getLatitude() {
         return latitude;
     }
