@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -26,6 +28,8 @@ public class GameScreen implements Screen {
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
     private ArrayList<Integer> orderToDrawStars;
+    private Texture cockpitTexture;
+    private Sprite cockpitSprite;
 
     public GameScreen(final Main game) {
         this.game = game;
@@ -36,6 +40,9 @@ public class GameScreen implements Screen {
         starsCoords = new ArrayList<FieldOfViewCoords>();
         spaceshipRelativeToStars = new ArrayList<SpaceshipRelative>();
         orderToDrawStars = new ArrayList<Integer>();
+        cockpitTexture = new Texture(Gdx.files.internal("cockpit.png"));
+        cockpitSprite = new Sprite(cockpitTexture);
+        cockpitSprite.setSize(16f,9f);
 
         spawnStars();
 
@@ -46,9 +53,9 @@ public class GameScreen implements Screen {
     }
 
     public void spawnStars() {
-        stars.add(new Star(new AbsoluteCoords3D(0, 20, 0), Color.CYAN, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(20, 0, 0), Color.CYAN, null, 1));
-        //stars.add(new Star(new AbsoluteCoords3D(0, 15, 0), Color.CYAN, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(0, 50, 0), Color.CYAN, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.RED, null, 1));
+        stars.add(new Star(new AbsoluteCoords3D(0, 25, 0), Color.GREEN, null, 1));
     }
 
     @Override
@@ -66,16 +73,17 @@ public class GameScreen implements Screen {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            spaceship.rotateLongitude(-0.17f*delta);
+            spaceship.rotateLongitude(-0.17f * delta);
             fov.setCenter(spaceship.getLatitude(), spaceship.getLongitude());
             System.out.println("coucou");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            spaceship.rotateLongitude(0.17f*delta);
+            spaceship.rotateLongitude(0.17f * delta);
             fov.setCenter(spaceship.getLatitude(), spaceship.getLongitude());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            spaceship.increaseSpeed(delta);
+            spaceship.getSpaceshipCord().move(delta, spaceship.getLatitude(), spaceship.getLongitude());
+
         }
     }
 
@@ -89,7 +97,6 @@ public class GameScreen implements Screen {
             orderToDrawStars.add(i);
         }
 
-        spaceship.getSpaceshipCord().
     }
 
     private void draw() {
@@ -102,8 +109,8 @@ public class GameScreen implements Screen {
 
         for (int i = 0; i < stars.size(); i++) {
             float[] normalisedCoords = starsCoords.get(i).getNormalisedCoords();
-            normalisedCoords[0] = (normalisedCoords[0]+1)*8f;
-            normalisedCoords[1] = (normalisedCoords[1]+1)*4.5f;
+            normalisedCoords[0] = (normalisedCoords[0] + 1) * 8f;
+            normalisedCoords[1] = (normalisedCoords[1] + 1) * 4.5f;
             if (starsCoords.get(i).getVisibility()) {
                 stars.get(i).render(game.shape, normalisedCoords[0], normalisedCoords[1], spaceshipRelativeToStars.get(i).getDistance(), fov.getFovAngles()[0]);
             }
@@ -115,9 +122,8 @@ public class GameScreen implements Screen {
         float worldWidth = game.viewport.getWorldWidth();
         float worldHeight = game.viewport.getWorldHeight();
 
-
-       game.font.draw(game.sprite, String.format("Long %f, Lat %f", spaceship.getLatitude(), spaceship.getLongitude()), 1, 1);
-
+        cockpitSprite.draw(game.sprite);
+        game.font.draw(game.sprite, String.format("Long %f\nLat %f", spaceship.getLatitude(), spaceship.getLongitude()), 7f, 2.75f);
 
         game.sprite.end();
     }
