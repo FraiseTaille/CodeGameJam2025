@@ -11,9 +11,9 @@ public class BlackHole {
         this.height = height;
         this.coords3d = coords3d;
     }
-    
+
     public boolean spaceshipInsideBlackHole(Spaceship spaceship) {
-        SpaceshipRelative space = new SpaceshipRelative(this.coords3d,spaceship.getSpaceshipCord());
+        SpaceshipRelative space = new SpaceshipRelative(this.coords3d,spaceship.getSpaceshipCoord());
         return space.getDistance() <= height;
     }
 

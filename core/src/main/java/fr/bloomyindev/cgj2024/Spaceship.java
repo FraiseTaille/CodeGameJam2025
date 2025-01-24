@@ -62,7 +62,7 @@ public class Spaceship {
     }
 
     public void increaseSpeed(float delta) {
-        this.speed = MathUtils.clamp(delta+this.speed, 0, 20);
+        this.speed = MathUtils.clamp(delta+this.speed, -20, 20);
     }
 
     public void move() {
