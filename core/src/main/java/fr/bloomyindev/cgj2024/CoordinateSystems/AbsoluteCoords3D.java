@@ -19,7 +19,7 @@ public class AbsoluteCoords3D {
 
 		DeltaX = otherCoords[0] - this.x;
 		DeltaY = otherCoords[1] - this.y;
-		DeltaZ = otherCoords[0] - this.z;
+		DeltaZ = otherCoords[2] - this.z;
 
 		return new float[]{DeltaX, DeltaY, DeltaZ};
 	}
