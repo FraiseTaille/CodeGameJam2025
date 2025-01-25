@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
                 float x = Ut.randomMinMax(-5000, 5000);
                 float y = Ut.randomMinMax(-5000, 5000);
                 float z = 0;
-                Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.RED, 1, false);
+                Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.YELLOW, 1, false);
                 if (stars.isEmpty()) {
                     confirmedStar = true;
                 } else {
