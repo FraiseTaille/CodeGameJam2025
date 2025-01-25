@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import fr.bloomyindev.cgj2024.Chollet;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 import fr.bloomyindev.cgj2024.Main;
 import fr.bloomyindev.cgj2024.Spaceship;
@@ -65,13 +66,14 @@ public class GameScreen implements Screen {
     }
 
     public void spawnStars() {
+        stars.add(new Chollet(new AbsoluteCoords3D(120, 69,0), 1));
         for (int i = 0; i < 9; i++) {
             boolean confirmedStar = false;
             while (!confirmedStar) {
                 float x = Ut.randomMinMax(-10000, 10000);
                 float y = Ut.randomMinMax(-10000, 10000);
                 float z = 0;
-                Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.RED, null, 1);
+                Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.RED, 1, false);
                 if (stars.isEmpty()) {
                     confirmedStar = true;
                 } else {
@@ -110,12 +112,12 @@ public class GameScreen implements Screen {
         float delta = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-            spaceship.rotateYaw(-10.f * (float) (Math.PI / 180.f) * delta);
+            spaceship.rotateYaw(-15.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-            spaceship.rotateYaw(10.f * (float) (Math.PI / 180.f) * delta);
+            spaceship.rotateYaw(15.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
@@ -143,13 +145,13 @@ public class GameScreen implements Screen {
             spaceship.changeSpeed(1f * delta);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-            spaceship.rotatePitch(10.f * (float) (Math.PI / 180.f) * delta);
-        }
+        //if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+        //    spaceship.rotatePitch(10.f * (float) (Math.PI / 180.f) * delta);
+        //}
 
-        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
-            spaceship.rotatePitch(-10.f * (float) (Math.PI / 180.f) * delta);
-        }
+        //if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+        //    spaceship.rotatePitch(-10.f * (float) (Math.PI / 180.f) * delta);
+        //}
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_B)) {
             spaceship.setSpeed(0);
@@ -163,6 +165,16 @@ public class GameScreen implements Screen {
     private void logic() {
         spaceship.move();
 
+        for (int i = 0; i < orderToDrawStars.size(); i++) {
+            System.out.print(spaceshipRelativeToStars.get(orderToDrawStars.get(i)).getDistance());
+            System.out.print(", ");
+        }
+        System.out.println();
+
+        if (orderToDrawStars.size() != 0) {
+            int idClosestStar = SpaceshipRelative.smallestDistanceId(spaceshipRelativeToStars);
+            game.soundManager.playSound(spaceshipRelativeToStars.get(idClosestStar).getDistance(), stars.get(idClosestStar));
+        }
         for (int i = 0; i < starsCoords.size(); i++) {
             SpaceshipRelative relCoords = spaceshipRelativeToStars.get(i);
             relCoords.reComputeRelativeCoords(spaceship.getSpaceshipCoord());

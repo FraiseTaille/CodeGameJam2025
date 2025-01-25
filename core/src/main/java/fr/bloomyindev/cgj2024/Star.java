@@ -6,24 +6,19 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 
 public class Star {
-    private Sound sound;
     private Color color;
     private AbsoluteCoords3D coords;
     private float angularSize;
     private int absoluteRadius;
     private boolean visited;
+    private boolean isVisitable;
 
-    public Star(AbsoluteCoords3D coords, Color color, Sound sound, int absoluteRadius) {
+    public Star(AbsoluteCoords3D coords, Color color, int absoluteRadius, boolean isVisitable) {
         this.coords = coords;
         this.color = color;
-        this.sound = sound;
         this.absoluteRadius = absoluteRadius;
         this.visited = false;
-    }
-
-
-    public Sound getSound() {
-        return sound;
+        this.isVisitable = isVisitable;
     }
 
     public Color getColor() {
@@ -72,6 +67,10 @@ public class Star {
 
     public boolean isVisited() {
         return visited;
+    }
+
+    public boolean isVisitable() {
+        return isVisitable;
     }
 
     @Override

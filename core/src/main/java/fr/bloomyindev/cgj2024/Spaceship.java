@@ -34,14 +34,21 @@ public class Spaceship {
     private void rotate(boolean dir, float number) {
         for (float i = 0; i < Math.abs(number); i++) {
             if (dir) {
-                this.pitch += number;
+                this.pitch = number;
 
-                this.pitch = (this.pitch + (float) Math.PI) % (float)Math.TAU - (float)Math.PI;
+                if (this.pitch < -(float)Math.PI+.02f) {
+                    this.pitch = (float)Math.PI-.01f;
+                } else if (this.pitch > Math.PI+.02f) {
+                    this.pitch = -(float)Math.PI+.01f;
+                }
             } else {
                 this.yaw += number;
 
-                this.yaw = (this.yaw + (float) Math.PI) % (float)Math.TAU - (float)Math.PI;
-                System.out.println("," + this.yaw);
+                if (this.yaw < -Math.PI+.02f) {
+                    this.yaw = (float)Math.PI+.005f;
+                }else if (this.yaw > Math.PI+.02f) {
+                    this.yaw = -(float)Math.PI+.0625f;
+                }
                 //this.yaw -= (float) Math.PI;
             }
         }

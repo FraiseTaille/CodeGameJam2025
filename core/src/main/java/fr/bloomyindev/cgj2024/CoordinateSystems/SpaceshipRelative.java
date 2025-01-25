@@ -2,6 +2,8 @@ package fr.bloomyindev.cgj2024.CoordinateSystems;
 
 import fr.bloomyindev.cgj2024.Ut;
 
+import java.util.ArrayList;
+
 public class SpaceshipRelative {
 	private AbsoluteCoords3D coords3d;
 	private float lat, lng;
@@ -54,4 +56,14 @@ public class SpaceshipRelative {
 			this.lng = 0;
 		}
 	}
+
+    public static int smallestDistanceId(ArrayList<SpaceshipRelative> spaceshipRelativeToStars) {
+        int i = 0;
+        for (int j = 0; j < spaceshipRelativeToStars.size(); j++) {
+            if (spaceshipRelativeToStars.get(j).getDistance() < spaceshipRelativeToStars.get(i).getDistance()) {
+                i = j;
+            }
+        }
+        return i;
+    }
 }
