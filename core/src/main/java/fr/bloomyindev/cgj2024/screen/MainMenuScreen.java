@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import fr.bloomyindev.cgj2024.Main;
@@ -11,9 +12,13 @@ import fr.bloomyindev.cgj2024.Main;
 public class MainMenuScreen implements Screen {
 
     final Main game;
+    private BitmapFont fontBig;
 
     public MainMenuScreen(final Main game) {
         this.game = game;
+        fontBig = new BitmapFont();
+        fontBig.setUseIntegerPositions(false);
+        fontBig.getData().setScale(.0625f);
     }
 
     @Override
@@ -25,8 +30,8 @@ public class MainMenuScreen implements Screen {
 
         game.sprite.begin();
         // draw text. Remember that x and y are in meters
-        game.font.draw(game.sprite, "Welcome to the game!!! ", 1, 1.5f);
-        game.font.draw(game.sprite, "Tap anywhere to begin!", 1, 1);
+        fontBig.draw(game.sprite, "The Symphony Of Stars", 3f, 5f);
+        game.font.draw(game.sprite, "Cliquez pour commencer !", 1, 1);
         game.sprite.end();
 
         if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.BUTTON_A)) {

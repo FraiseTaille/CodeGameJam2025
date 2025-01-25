@@ -59,7 +59,11 @@ public class IntroductionScreen implements Screen {
             indexText += indexText < texts.size() - 1 ? 1 : 0;
 
         }
+
         game.font.draw(game.sprite, texts.get(indexText), 1, 1.5f);
+        if (doneDisplayingText) {
+            game.font.draw(game.sprite, "ZQSD/WASD/Flèches: bouger\nEspace: freiner\nCliquez pour continuer", 12f, 1.5f);
+        }
         game.sprite.end();
         if (doneDisplayingText && (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.BUTTON_A))) {
             game.setScreen(new GameScreen(game));
