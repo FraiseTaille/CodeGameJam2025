@@ -3,6 +3,7 @@ package fr.bloomyindev.cgj2024.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,8 +15,11 @@ import java.util.ArrayList;
 public class CreditsScreen implements Screen {
     final Main game;
 
+    private Music AC = Gdx.audio.newMusic(Gdx.files.internal("ACLong.mp3"));
+
     public CreditsScreen(final Main game) {
         this.game = game;
+        AC.play();
     }
 
     @Override
