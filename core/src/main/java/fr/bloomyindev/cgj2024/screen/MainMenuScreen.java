@@ -31,7 +31,7 @@ public class MainMenuScreen implements Screen {
         game.sprite.begin();
         // draw text. Remember that x and y are in meters
         fontBig.draw(game.sprite, "The Symphony Of Stars", 3f, 5f);
-        game.font.draw(game.sprite, "Cliquez pour commencer !", 1, 1);
+        game.font.draw(game.sprite, "Cliquez pour commencer !" + "\n" + "Appuyez sur C pour voir les crédits", 1, 1);
         game.sprite.end();
 
         if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.BUTTON_A)) {
