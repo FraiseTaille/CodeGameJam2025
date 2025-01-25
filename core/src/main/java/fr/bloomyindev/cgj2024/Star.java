@@ -68,4 +68,8 @@ public class Star {
     public String toString() {
         return visited ? "Visited" : "Not Visited";
     }
+
+    public boolean isCholletStar() {
+        return false;
+    }
 }
