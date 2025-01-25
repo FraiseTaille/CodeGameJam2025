@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (int i = 0; i < orderToDrawStars.size(); i++) {
+        for (int i = orderToDrawStars.size()-1; i > -1; i--) {
             int j = orderToDrawStars.get(i);
             FieldOfViewCoords starFOVCoords = starsCoords.get(j);
             float[] normalisedCoords = starFOVCoords.getNormalisedCoords();
