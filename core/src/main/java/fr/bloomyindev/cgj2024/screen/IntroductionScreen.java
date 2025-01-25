@@ -36,8 +36,8 @@ public class IntroductionScreen implements Screen {
 
     public void addText() {
         texts.add("Après avoir reçu des signaux étranges provenant du vide spatial,");
-        texts.add("une équipe d’explorateurs partira à leur poursuite afin de découvrir leur provenance");
-        texts.add("Mais l’espace est semé d'embûches et ils devront se méfier des sons parasites.");
+        texts.add("une équipe d'explorateurs partira à leur poursuite afin de découvrir leur provenance");
+        texts.add("Mais l'espace est semé d'embûches et ils devront se méfier des sons parasites.");
     }
 
     @Override
