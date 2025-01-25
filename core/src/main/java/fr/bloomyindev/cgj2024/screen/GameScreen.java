@@ -24,7 +24,7 @@ public class GameScreen implements Screen {
     private ArrayList<FieldOfViewCoords> starsCoords;
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
-    private float fovAngle = 70.0f * (float) (Math.PI / 180.0);
+    private float fovAngle = 110.0f * (float) (Math.PI / 180.0);
     private ArrayList<Integer> orderToDrawStars;
     private Texture cockpitTexture;
     private Sprite cockpitSprite;
@@ -93,6 +93,14 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             spaceship.changeSpeed(1f * delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            spaceship.rotatePitch(10.f * (float) (Math.PI / 180.f) * delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            spaceship.rotatePitch(-10.f * (float) (Math.PI / 180.f) * delta);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
