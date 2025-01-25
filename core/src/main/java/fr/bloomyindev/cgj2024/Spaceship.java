@@ -36,8 +36,7 @@ public class Spaceship {
             if (dir) {
                 this.pitch += number;
 
-                this.pitch = (this.pitch + (float) Math.PI/2.f) % (float)Math.PI - (float)Math.PI/2.f;
-                System.out.println(this.pitch);
+                this.pitch = (this.pitch + (float) Math.PI) % (float)Math.TAU - (float)Math.PI;
             } else {
                 this.yaw += number;
 
