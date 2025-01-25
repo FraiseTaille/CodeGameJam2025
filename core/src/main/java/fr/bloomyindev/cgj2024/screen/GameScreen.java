@@ -144,7 +144,7 @@ public class GameScreen implements Screen {
     }
 
     private void setVisit(Star star, int index) {
-        if (spaceshipRelativeToStars.get(index).getDistance() <= 30 * star.getAbsoluteRadius() && !star.isVisited()) {
+        if (spaceshipRelativeToStars.get(index).getDistance() <= 5 * star.getAbsoluteRadius() && !star.isVisited()) {
             star.visit();
         }
     }
