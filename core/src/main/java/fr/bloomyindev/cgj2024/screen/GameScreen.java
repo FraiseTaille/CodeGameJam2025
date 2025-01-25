@@ -94,8 +94,24 @@ public class GameScreen implements Screen {
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
-            spaceship.changeSpeed(-1f * delta);
+        boolean noCollision = true;
+        int i = 0;
+        while (noCollision && i < starsCoords.size()) {
+            FieldOfViewCoords starCoord = starsCoords.get(i);
+            Star star = stars.get(i);
+            if (starCoord.getVisibility() && spaceshipRelativeToStars.get(i).getDistance() <= 6 * star.getAbsoluteRadius()) {
+                noCollision = false;
+            }
+            i++;
+        }
+        if (!noCollision) {
+            if (Math.abs(spaceship.getSpeed()) > 0) {
+                spaceship.setSpeed(0);
+            }
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
+                spaceship.changeSpeed(-1f * delta);
+            }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2)) {
@@ -150,7 +166,7 @@ public class GameScreen implements Screen {
     }
 
     private void setVisit(Star star, int index) {
-        if (spaceshipRelativeToStars.get(index).getDistance() <= 5 * star.getAbsoluteRadius() && !star.isVisited()) {
+        if (spaceshipRelativeToStars.get(index).getDistance() <= 7 * star.getAbsoluteRadius() && !star.isVisited()) {
             star.visit();
         }
     }
