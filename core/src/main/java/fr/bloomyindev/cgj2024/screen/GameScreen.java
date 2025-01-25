@@ -24,7 +24,7 @@ public class GameScreen implements Screen {
     private ArrayList<FieldOfViewCoords> starsCoords;
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
-    private float fovAngle = 90.0f * (float) (Math.PI / 180.0);
+    private float fovAngle = 110.0f * (float) (Math.PI / 180.0);
     private ArrayList<Integer> orderToDrawStars;
     private Texture cockpitTexture;
     private Sprite cockpitSprite;
