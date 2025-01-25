@@ -13,6 +13,7 @@ import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 import fr.bloomyindev.cgj2024.Main;
 import fr.bloomyindev.cgj2024.Spaceship;
 import fr.bloomyindev.cgj2024.Star;
+import fr.bloomyindev.cgj2024.Ut;
 
 import java.util.ArrayList;
 
@@ -64,10 +65,34 @@ public class GameScreen implements Screen {
     }
 
     public void spawnStars() {
-        stars.add(new Star(new AbsoluteCoords3D(50, 0, 0), Color.CYAN, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(-50, 0, 0), Color.RED, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(0, 50, 0), Color.GREEN, null, 1));
-        stars.add(new Star(new AbsoluteCoords3D(0, -50, 0), Color.YELLOW, null, 1));
+        for (int i = 0; i < 9; i++) {
+            boolean confirmedStar = false;
+            while (!confirmedStar) {
+                float x = Ut.randomMinMax(-10000, 10000);
+                float y = Ut.randomMinMax(-10000, 10000);
+                float z = 0;
+                Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.RED, null, 1);
+                if (stars.isEmpty()) {
+                    confirmedStar = true;
+                } else {
+                    boolean allConfirmed = true;
+                    int j = 0;
+                    while (allConfirmed && j < stars.size()) {
+                        Star starTest = stars.get(j);
+                        if (star.distanceBetween(starTest) < 1000) {
+                            allConfirmed = false;
+                        }
+                        j++;
+                    }
+                    if (allConfirmed) {
+                        confirmedStar = true;
+                    }
+                }
+                if (confirmedStar) {
+                    stars.add(star);
+                }
+            }
+        }
     }
 
     @Override

@@ -38,6 +38,16 @@ public class Star {
         return absoluteRadius;
     }
 
+    public long distanceBetween(Star star2) {
+        float[] Delta3D = star2.getCoordinates().getDelta(this.coords);
+
+        float xRel = Delta3D[0];
+        float yRel = Delta3D[1];
+        float zRel = Delta3D[2];
+
+        return (long) Math.sqrt(Ut.pow(xRel, 2.0f) + Ut.pow(yRel, 2.0f) + Ut.pow(zRel, 2.0f));
+    }
+
 
     /*
     * Please use `ShapeRenderer.begin()` before using this method
