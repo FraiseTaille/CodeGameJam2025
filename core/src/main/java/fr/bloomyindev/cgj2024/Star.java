@@ -1,5 +1,8 @@
 package fr.bloomyindev.cgj2024;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,13 +15,26 @@ public class Star {
     private int absoluteRadius;
     private boolean visited;
     private boolean isVisitable;
+    private ArrayList<Color> listeCouleur;
 
     public Star(AbsoluteCoords3D coords, Color color, int absoluteRadius, boolean isVisitable) {
         this.coords = coords;
-        this.color = color;
         this.absoluteRadius = absoluteRadius;
         this.visited = false;
         this.isVisitable = isVisitable;
+        construitListeCouleur();
+        Random random = new Random();
+        int randomNumber = random.nextInt(3 - 0 + 1) + 0;
+        this.color = listeCouleur.get(randomNumber);
+    }
+
+    public void construitListeCouleur() {
+        listeCouleur = new ArrayList<>();
+        listeCouleur.add(Color.BLUE);
+        listeCouleur.add(Color.BROWN);
+        listeCouleur.add(Color.RED);
+        listeCouleur.add(Color.PURPLE);
+        listeCouleur.add(Color.ORANGE);
     }
 
     public Color getColor() {
