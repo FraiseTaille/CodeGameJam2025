@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
             starsCoords
                     .add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
         }
+        System.out.println(stars);
     }
 
     public void spawnStars() {
@@ -129,9 +130,22 @@ public class GameScreen implements Screen {
             stars.set(i, star);
         }
 
+        for (int i = 0; i < starsCoords.size(); i++) {
+            Star star = stars.get(i);
+            setVisit(star, i);
+        }
+
+        System.out.println(stars);
+
         orderToDrawStars.clear();
         for (int i = 0; i < spaceshipRelativeToStars.size(); i++) {
             orderToDrawStars.add(i);
+        }
+    }
+
+    private void setVisit(Star star, int index) {
+        if (spaceshipRelativeToStars.get(index).getDistance() <= 30 * star.getAbsoluteRadius() && !star.isVisited()) {
+            star.visit();
         }
     }
 
