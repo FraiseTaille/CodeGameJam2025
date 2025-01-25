@@ -28,6 +28,16 @@ public class AbsoluteCoords3D {
 		this.x += speedX;
 		this.y += speedY;
 		this.z += speedZ;
+        if (this.x > 5000) {
+            this.x = -4999;
+        } else if (this.x < -5000) {
+            this.x = 4999;
+        }
+        if (this.y > 5000) {
+            this.y = -4999;
+        } else if (this.y < -5000) {
+            this.y = 4999;
+        }
 	}
 
 	public void setToOrigin() {

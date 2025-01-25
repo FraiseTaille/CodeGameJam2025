@@ -70,8 +70,8 @@ public class GameScreen implements Screen {
         for (int i = 0; i < 9; i++) {
             boolean confirmedStar = false;
             while (!confirmedStar) {
-                float x = Ut.randomMinMax(-10000, 10000);
-                float y = Ut.randomMinMax(-10000, 10000);
+                float x = Ut.randomMinMax(-5000, 5000);
+                float y = Ut.randomMinMax(-5000, 5000);
                 float z = 0;
                 Star star = new Star(new AbsoluteCoords3D(x, y, z), Color.RED, 1, false);
                 if (stars.isEmpty()) {
@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
                     int j = 0;
                     while (allConfirmed && j < stars.size()) {
                         Star starTest = stars.get(j);
-                        if (star.distanceBetween(starTest) < 1000) {
+                        if (star.distanceBetween(starTest) < 500) {
                             allConfirmed = false;
                         }
                         j++;
