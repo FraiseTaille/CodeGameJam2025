@@ -1,6 +1,7 @@
 package fr.bloomyindev.cgj2024.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,7 +61,7 @@ public class IntroductionScreen implements Screen {
         }
         game.font.draw(game.sprite, texts.get(indexText), 1, 1.5f);
         game.sprite.end();
-        if (doneDisplayingText && Gdx.input.isTouched()) {
+        if (doneDisplayingText && (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.BUTTON_A))) {
             game.setScreen(new GameScreen(game));
             dispose();
         }

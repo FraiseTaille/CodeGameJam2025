@@ -24,7 +24,7 @@ public class GameScreen implements Screen {
     private ArrayList<FieldOfViewCoords> starsCoords;
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
-    private float fovAngle = 70.0f * (float) (Math.PI / 180.0);
+    private float fovAngle = 110.0f * (float) (Math.PI / 180.0);
     private ArrayList<Integer> orderToDrawStars;
     private Texture cockpitTexture;
     private Sprite cockpitSprite;
@@ -76,26 +76,34 @@ public class GameScreen implements Screen {
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
             spaceship.rotateYaw(-10.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
             spaceship.rotateYaw(10.f * (float) (Math.PI / 180.f) * delta);
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
             System.out.printf("speed %f\n", spaceship.getSpeed());
             spaceship.changeSpeed(-1f * delta);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2)) {
             spaceship.changeSpeed(1f * delta);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+            spaceship.rotatePitch(10.f * (float) (Math.PI / 180.f) * delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+            spaceship.rotatePitch(-10.f * (float) (Math.PI / 180.f) * delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_B)) {
             spaceship.setSpeed(0);
         }
 
@@ -138,7 +146,7 @@ public class GameScreen implements Screen {
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (int i = 0; i < orderToDrawStars.size(); i++) {
+        for (int i = orderToDrawStars.size()-1; i > -1; i--) {
             int j = orderToDrawStars.get(i);
             FieldOfViewCoords starFOVCoords = starsCoords.get(j);
             float[] normalisedCoords = starFOVCoords.getNormalisedCoords();
