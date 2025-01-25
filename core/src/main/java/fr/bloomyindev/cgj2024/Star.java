@@ -11,12 +11,14 @@ public class Star {
     private AbsoluteCoords3D coords;
     private float angularSize;
     private int absoluteRadius;
+    private boolean visited;
 
     public Star(AbsoluteCoords3D coords, Color color, Sound sound, int absoluteRadius) {
         this.coords = coords;
         this.color = color;
         this.sound = sound;
         this.absoluteRadius = absoluteRadius;
+        this.visited = false;
     }
 
 
@@ -30,6 +32,10 @@ public class Star {
 
     public AbsoluteCoords3D getCoordinates() {
         return coords;
+    }
+
+    public int getAbsoluteRadius() {
+        return absoluteRadius;
     }
 
 
@@ -48,5 +54,18 @@ public class Star {
     public void computeAngularSize(long distance, float fovAngleX) {
         angularSize = 2 * (float) Math.asin((float) (2 * (float)absoluteRadius / distance));
         angularSize /= fovAngleX; // Pour convertir en format normalisé
+    }
+
+    public void visit() {
+        visited = true;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    @Override
+    public String toString() {
+        return visited ? "Visited" : "Not Visited";
     }
 }
