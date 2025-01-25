@@ -33,6 +33,10 @@ public class MainMenuScreen implements Screen {
             game.setScreen(new IntroductionScreen(game));
             dispose();
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+            game.setScreen(new CreditsScreen(game));
+        }
     }
 
     @Override
