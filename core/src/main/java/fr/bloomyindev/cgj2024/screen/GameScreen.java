@@ -24,8 +24,10 @@ public class GameScreen implements Screen {
     private ArrayList<FieldOfViewCoords> starsCoords;
     private ArrayList<SpaceshipRelative> spaceshipRelativeToStars;
     private FieldOfView fov;
-    private float fovAngle = 110.0f * (float) (Math.PI / 180.0);
+    private float fovAngle = 70.0f * (float) (Math.PI / 180.0);
     private ArrayList<Integer> orderToDrawStars;
+    private Texture skyboxTexture;
+    private Sprite skyboxSprite;
     private Texture cockpitTexture;
     private Sprite cockpitSprite;
 
@@ -41,6 +43,11 @@ public class GameScreen implements Screen {
 
         orderToDrawStars = new ArrayList<Integer>();
 
+        skyboxTexture = new Texture(Gdx.files.internal("skybox.png"));
+        skyboxSprite = new Sprite(skyboxTexture);
+
+        skyboxSprite.setSize(16f, 9f);
+
         cockpitTexture = new Texture(Gdx.files.internal("cockpit.png"));
         cockpitSprite = new Sprite(cockpitTexture);
 
@@ -53,7 +60,7 @@ public class GameScreen implements Screen {
             starsCoords
                     .add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
         }
-        System.out.println(stars);
+        //System.out.println(stars);
     }
 
     public void spawnStars() {
@@ -88,7 +95,6 @@ public class GameScreen implements Screen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
-            System.out.printf("speed %f\n", spaceship.getSpeed());
             spaceship.changeSpeed(-1f * delta);
         }
 
@@ -135,7 +141,7 @@ public class GameScreen implements Screen {
             setVisit(star, i);
         }
 
-        System.out.println(stars);
+        //System.out.println(stars);
 
         orderToDrawStars.clear();
         for (int i = 0; i < spaceshipRelativeToStars.size(); i++) {
@@ -155,6 +161,11 @@ public class GameScreen implements Screen {
         game.viewport.apply();
 
         game.sprite.setProjectionMatrix(game.viewport.getCamera().combined);
+
+        game.sprite.begin();
+        skyboxSprite.draw(game.sprite);
+        game.sprite.end();
+
         game.shape.setProjectionMatrix(game.viewport.getCamera().combined);
         game.shape.setAutoShapeType(true);
 

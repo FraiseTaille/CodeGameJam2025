@@ -36,15 +36,13 @@ public class Spaceship {
             if (dir) {
                 this.pitch += number;
 
-                this.pitch += (float) Math.PI;
-                this.pitch %= 2.f * (float) Math.PI;
-                this.pitch -= (float) Math.PI;
+                this.pitch = (this.pitch + (float) Math.PI) % (float)Math.TAU - (float)Math.PI;
             } else {
                 this.yaw += number;
 
-                this.yaw += (float) Math.PI;
-                this.yaw %= 2.f * (float) Math.PI;
-                this.yaw -= (float) Math.PI;
+                this.yaw = (this.yaw + (float) Math.PI) % (float)Math.TAU - (float)Math.PI;
+                System.out.println("," + this.yaw);
+                //this.yaw -= (float) Math.PI;
             }
         }
     }
