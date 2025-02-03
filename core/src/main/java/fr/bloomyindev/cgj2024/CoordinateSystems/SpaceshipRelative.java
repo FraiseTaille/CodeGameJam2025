@@ -1,5 +1,6 @@
 package fr.bloomyindev.cgj2024.CoordinateSystems;
 
+import fr.bloomyindev.cgj2024.Star;
 import fr.bloomyindev.cgj2024.Ut;
 
 import java.util.ArrayList;
@@ -57,10 +58,10 @@ public class SpaceshipRelative {
 		}
 	}
 
-    public static int smallestDistanceId(ArrayList<SpaceshipRelative> spaceshipRelativeToStars) {
+    public static int smallestDistanceTrueStarId(ArrayList<SpaceshipRelative> spaceshipRelativeToStars, ArrayList<Star> stars) {
         int i = 0;
         for (int j = 0; j < spaceshipRelativeToStars.size(); j++) {
-            if (spaceshipRelativeToStars.get(j).getDistance() < spaceshipRelativeToStars.get(i).getDistance()) {
+            if (spaceshipRelativeToStars.get(j).getDistance() < spaceshipRelativeToStars.get(i).getDistance() && !stars.get(j).isDecorative() && !stars.get(j).isVisited()) {
                 i = j;
             }
         }

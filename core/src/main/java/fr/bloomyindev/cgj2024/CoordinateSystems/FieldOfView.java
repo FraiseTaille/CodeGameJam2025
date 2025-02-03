@@ -11,7 +11,7 @@ public class FieldOfView {
 	 */
 	public FieldOfView(float centerLat, float centerLng, float fovAngleX) {
 		this.fovAngleX = fovAngleX;
-		this.fovAngleY = fovAngleX / (16.f / 9.f);
+		this.fovAngleY = fovAngleX / (9.f / 9.f);
 
 		this.latCenter = centerLat;
 		this.lngCenter = centerLng;

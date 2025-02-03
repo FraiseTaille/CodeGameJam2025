@@ -48,7 +48,6 @@ public class IntroductionScreen implements Screen {
         game.viewport.apply();
         game.sprite.setProjectionMatrix(game.viewport.getCamera().combined);
 
-
         game.sprite.begin();
         skySprite.draw(game.sprite);
         if (time > timeBeforeNextBigThing) {
@@ -72,6 +71,9 @@ public class IntroductionScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             game.setScreen(new GameScreen(game));
             dispose();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            doneDisplayingText = true;
         }
     }
 

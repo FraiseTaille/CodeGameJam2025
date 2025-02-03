@@ -25,18 +25,20 @@ public class AbsoluteCoords3D {
 	}
 
 	public void move(float speedX, float speedY, float speedZ) {
-		this.x += speedX;
-		this.y += speedY;
 		this.z += speedZ;
-        if (this.x > 5000) {
-            this.x = -4999;
-        } else if (this.x < -5000) {
-            this.x = 4999;
+        if (!(this.x > 50000 && Math.abs(speedX) > 0) && !(this.x < -50000 && Math.abs(speedX) > 0)) {
+            this.x += speedX;
+        } else if (this.x > 50000) {
+            this.x = 50000;
+        } else if (this.x < -50000) {
+            this.x = -50000;
         }
-        if (this.y > 5000) {
-            this.y = -4999;
-        } else if (this.y < -5000) {
-            this.y = 4999;
+        if (!(this.y > 50000 && Math.abs(speedY) > 0) && !(this.y < -50000 && Math.abs(speedY) > 0)) {
+            this.y += speedY;
+        } else if (this.y > 50000) {
+            this.y = 50000;
+        } else if (this.y < -50000) {
+            this.y = -50000;
         }
 	}
 

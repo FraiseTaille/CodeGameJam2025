@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import fr.bloomyindev.cgj2024.CoordinateSystems.FieldOfViewCoords;
 
 public class SoundManager {
 
@@ -27,17 +28,18 @@ public class SoundManager {
     }
 
     public void playSound(long distance, Star star) {
-        if (star.isVisitable() && distance <= 5000) {
+        if (star.isVisitable() && distance <= 10000) {
             float vol = calculateVolumeWithDistance(distance);
-            System.out.printf("%f (dist %d) playing\n", vol, distance);
             music.setVolume(0);
             musicWMel.setVolume(vol);
             musicTroll.setVolume(0f);
-        } else if (star.isCholletStar() && distance <= 5000) {
+            System.out.println(vol);
+        } else if (star.isCholletStar() && distance <= 10000) {
             float vol = calculateVolumeWithDistance(distance);
             musicTroll.setVolume(vol);
             music.setVolume(0f);
-        } else if (!star.isVisitable() && !star.isCholletStar() && distance <= 5000) {
+            System.out.println(vol);
+        } else if (!star.isVisitable() && !star.isCholletStar() && distance <= 10000 && !star.isDecorative()) {
             float vol = calculateVolumeWithDistance(distance);
             music.setVolume(0);
             if (distance <= 300) {
@@ -50,8 +52,10 @@ public class SoundManager {
                 musicWMel.setVolume(vol);
             }
             musicTroll.setVolume(0f);
+            System.out.println(vol);
         } else {
-            music.setVolume(0.5f);
+            float k = (float) ((float) 10000 / Math.sqrt(19));
+            music.setVolume((float) (1.0 / (1 + Math.pow(10000 / k, 2))));
             musicTroll.setVolume(0f);
             musicWMel.setVolume(0f);
         }
@@ -59,6 +63,7 @@ public class SoundManager {
     }
 
     private float calculateVolumeWithDistance(long distance) {
-        return (float) Math.exp(-((double) distance / 1000));
+        float k = (float) ((float) 10000 / Math.sqrt(19));
+        return (float) ((float) 1 / (1 + Math.pow(distance / k, 2)));
     }
 }
