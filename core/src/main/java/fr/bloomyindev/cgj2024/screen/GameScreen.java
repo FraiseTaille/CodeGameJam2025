@@ -32,6 +32,7 @@ public class GameScreen implements Screen {
     private Sprite dangerSprite;
     private float[] zone20kX20k;
     private boolean backToCenter;
+    private boolean reversingAt0;
 
     public GameScreen(final Main game) {
         this.game = game;
@@ -67,6 +68,8 @@ public class GameScreen implements Screen {
         zone20kX20k = new float[4];
 
         backToCenter = false;
+
+        reversingAt0 = false;
     }
 
     public void spawnStars() {
@@ -130,23 +133,7 @@ public class GameScreen implements Screen {
             fov.setCenter(spaceship.getPitch(), spaceship.getYaw());
         }
 
-        int idClosestStar = SpaceshipRelative.smallestDistanceStarId(spaceshipRelativeToStars, stars, false);
-        FieldOfViewCoords closestStarCoord = starsCoords.get(idClosestStar);
-        SpaceshipRelative spaceshipRelativeToClosestStar = spaceshipRelativeToStars.get(idClosestStar);
-        Star star = stars.get(idClosestStar);
-        if (closestStarCoord.getVisibility() && spaceshipRelativeToClosestStar.getDistance() <= 6L * star.getAbsoluteRadius()) {
-            if (Math.abs(spaceship.getSpeed()) > 0 && !(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2))) {
-                spaceship.setSpeed(0);
-            }
-        } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
-                spaceship.changeSpeed(-1f * delta);
-            }
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2)) {
-            spaceship.changeSpeed(delta);
-        }
+        collisionManagement(delta);
 
         //if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
         //    spaceship.rotatePitch(10.f * (float) (Math.PI / 180.f) * delta);
@@ -163,6 +150,32 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             spaceship.getSpaceshipCoord().setToOrigin();
             backToCenter = true;
+        }
+    }
+
+    private void collisionManagement(float delta) {
+        int idClosestStar = SpaceshipRelative.smallestDistanceStarId(spaceshipRelativeToStars, stars, false);
+        FieldOfViewCoords closestStarCoord = starsCoords.get(idClosestStar);
+        SpaceshipRelative spaceshipRelativeToClosestStar = spaceshipRelativeToStars.get(idClosestStar);
+        Star star = stars.get(idClosestStar);
+        if (closestStarCoord.getVisibility() && spaceshipRelativeToClosestStar.getDistance() <= 6L * star.getAbsoluteRadius()) {
+            if (Math.abs(spaceship.getSpeed()) > 0 && !((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2)) && reversingAt0)) {
+                spaceship.setSpeed(0);
+            }
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R1)) {
+                spaceship.changeSpeed(-1f * delta);
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.BUTTON_R2)) {
+            if (!reversingAt0 && spaceship.getSpeed() == 0) {
+                reversingAt0 = true;
+            }
+            System.out.println(reversingAt0);
+            spaceship.changeSpeed(delta);
+        } else {
+            reversingAt0 = false;
         }
     }
 
@@ -293,25 +306,16 @@ public class GameScreen implements Screen {
                 float x = Ut.randomMinMax((int) zone20kX20k[0], (int) zone20kX20k[1]);
                 float y = Ut.randomMinMax((int) zone20kX20k[2], (int) zone20kX20k[3]);
                 float z = Ut.randomMinMax(-3000, 3000);
-                Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
-                stars.add(star);
-                spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-                starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+                generateNewDecorativeStar(x, y, z);
             }
         } else if (!spaceship.getSpaceshipCoord().identicalZones(zone20kX20k)) {
             int nb = Ut.randomMinMax(1, 3);
-            if (nb == 3) {
-                nb = 2;
-            }
             if (newZone20kX20k[0] < zone20kX20k[0] && newZone20kX20k[0] >= -50000) {
                 for (int j = 0; j < nb; j++) {
                     float x = Ut.randomMinMax((int) newZone20kX20k[0], (int) zone20kX20k[0]);
                     float y = Ut.randomMinMax((int) zone20kX20k[2], (int) zone20kX20k[3]);
                     float z = Ut.randomMinMax(-3000, 3000);
-                    Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
-                    stars.add(star);
-                    spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-                    starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+                    generateNewDecorativeStar(x, y, z);
                 }
             }
             if (newZone20kX20k[1] > zone20kX20k[1] && newZone20kX20k[1] <= 50000) {
@@ -319,10 +323,7 @@ public class GameScreen implements Screen {
                     float x = Ut.randomMinMax((int) zone20kX20k[1], (int) newZone20kX20k[1]);
                     float y = Ut.randomMinMax((int) zone20kX20k[2], (int) zone20kX20k[3]);
                     float z = Ut.randomMinMax(-3000, 3000);
-                    Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
-                    stars.add(star);
-                    spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-                    starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+                    generateNewDecorativeStar(x, y, z);
                 }
             }
             if (newZone20kX20k[2] < zone20kX20k[2] && newZone20kX20k[2] >= -50000) {
@@ -330,10 +331,7 @@ public class GameScreen implements Screen {
                     float x = Ut.randomMinMax((int) zone20kX20k[0], (int) zone20kX20k[1]);
                     float y = Ut.randomMinMax((int) newZone20kX20k[2], (int) zone20kX20k[2]);
                     float z = Ut.randomMinMax(-3000, 3000);
-                    Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
-                    stars.add(star);
-                    spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-                    starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+                    generateNewDecorativeStar(x, y, z);
                 }
             }
             if (newZone20kX20k[3] > zone20kX20k[3] && newZone20kX20k[3] <= 50000) {
@@ -341,22 +339,44 @@ public class GameScreen implements Screen {
                     float x = Ut.randomMinMax((int) zone20kX20k[0], (int) zone20kX20k[1]);
                     float y = Ut.randomMinMax((int) zone20kX20k[3], (int) newZone20kX20k[3]);
                     float z = Ut.randomMinMax(-3000, 3000);
-                    Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
-                    stars.add(star);
-                    spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-                    starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+                    generateNewDecorativeStar(x, y, z);
                 }
             }
             zone20kX20k = newZone20kX20k;
-            for (int i = 0; i < starsCoords.size(); i++) {
-                if (!stars.get(i).starIsInZone(zone20kX20k) && stars.get(i).isDecorative()) {
-                    stars.remove(i);
-                    spaceshipRelativeToStars.remove(i);
-                    starsCoords.remove(i);
-                    i--;
-                }
+            int nbStarsInZone = getNbStarsNotInZone();
+            if (nbStarsInZone > 1000) {
+                removeStarsNotInZone();
             }
         }
+    }
+
+    private int getNbStarsNotInZone() {
+        int nbStarsNotInZone = 0;
+        for (int i = 0; i < starsCoords.size(); i++) {
+            if (!stars.get(i).starIsInZone(zone20kX20k) && stars.get(i).isDecorative()) {
+                nbStarsNotInZone++;
+            }
+        }
+        return nbStarsNotInZone;
+    }
+
+    private void removeStarsNotInZone() {
+        for (int i = 0; i < starsCoords.size(); i++) {
+            if (!stars.get(i).starIsInZone(zone20kX20k) && stars.get(i).isDecorative()) {
+                stars.remove(i);
+                spaceshipRelativeToStars.remove(i);
+                starsCoords.remove(i);
+                i--;
+            }
+        }
+        System.gc();
+    }
+
+    private void generateNewDecorativeStar(float x, float y, float z) {
+        Star star = new DecorativeStar(new AbsoluteCoords3D(x, y, z), 1);
+        stars.add(star);
+        spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
+        starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
     }
 
     @Override

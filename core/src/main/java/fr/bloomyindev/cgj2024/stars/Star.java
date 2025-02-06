@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 import fr.bloomyindev.cgj2024.Ut;
 
-public class Star {
+public abstract class Star {
     private Color color;
     private AbsoluteCoords3D coords;
     private float angularSize;
