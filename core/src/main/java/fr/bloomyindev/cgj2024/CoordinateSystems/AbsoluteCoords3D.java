@@ -1,5 +1,7 @@
 package fr.bloomyindev.cgj2024.CoordinateSystems;
 
+import fr.bloomyindev.cgj2024.Ut;
+
 public class AbsoluteCoords3D {
 	private float x, y, z;
 
@@ -70,5 +72,12 @@ public class AbsoluteCoords3D {
 
     public boolean isInZone(float[] zone) {
         return x >= zone[0] && x <= zone[1] && y >= zone[2] && y <= zone[3];
+    }
+
+    public static AbsoluteCoords3D generateNewRandomCoordinates(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+        float x = Ut.randomMinMax(minX, maxX);
+        float y = Ut.randomMinMax(minY, maxY);
+        float z = Ut.randomMinMax(minZ, maxZ);
+        return new AbsoluteCoords3D(x, y, z);
     }
 }
