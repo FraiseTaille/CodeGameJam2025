@@ -1,15 +1,10 @@
-package fr.bloomyindev.cgj2024;
+package fr.bloomyindev.cgj2024.stars;
 
 import fr.bloomyindev.cgj2024.CoordinateSystems.AbsoluteCoords3D;
 
 public class DecorativeStar extends Star {
 
     public DecorativeStar(AbsoluteCoords3D coords, int absoluteRadius) {
-        super(coords, absoluteRadius, false);
-    }
-
-    @Override
-    public boolean isDecorative() {
-        return true;
+        super(coords, absoluteRadius, false, false, true, false);
     }
 }

@@ -1,40 +1,51 @@
-package fr.bloomyindev.cgj2024;
+package fr.bloomyindev.cgj2024.stars;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
+import fr.bloomyindev.cgj2024.Ut;
 
 public class Star {
     private Color color;
     private AbsoluteCoords3D coords;
     private float angularSize;
     private int absoluteRadius;
-    private boolean visited;
-    private boolean isVisitable;
     private ArrayList<Color> listeCouleur;
+    private boolean isVisitable;
+    private boolean isParasite;
+    private boolean isDecorative;
+    private boolean isChollet;
+    private boolean visited;
 
-    public Star(AbsoluteCoords3D coords, int absoluteRadius, boolean isVisitable) {
+    public Star(AbsoluteCoords3D coords, int absoluteRadius, boolean isVisitable, boolean isParasite, boolean isDecorative, boolean isChollet) {
         this.coords = coords;
         this.absoluteRadius = absoluteRadius;
-        this.visited = false;
         this.isVisitable = isVisitable;
-        construitListeCouleur();
-        Random random = new Random();
-        int randomNumber = random.nextInt(3 - 0 + 1) + 0;
-        this.color = !isDecorative() ? listeCouleur.get(randomNumber) : Color.WHITE;
+        this.isParasite = isParasite;
+        this.isDecorative = isDecorative;
+        this.isChollet = isChollet;
+        genererCouleurs();
     }
 
-    public void construitListeCouleur() {
-        listeCouleur = new ArrayList<>();
-        listeCouleur.add(Color.BLUE);
-        listeCouleur.add(Color.BROWN);
-        listeCouleur.add(Color.RED);
-        listeCouleur.add(Color.PURPLE);
-        listeCouleur.add(Color.ORANGE);
+    public void genererCouleurs() {
+        if (isVisitable() || isParasite()) {
+            listeCouleur = new ArrayList<>();
+            listeCouleur.add(Color.BLUE);
+            listeCouleur.add(Color.BROWN);
+            listeCouleur.add(Color.RED);
+            listeCouleur.add(Color.PURPLE);
+            listeCouleur.add(Color.ORANGE);
+            Random random = new Random();
+            int randomNumber = random.nextInt(4);
+            this.color = listeCouleur.get(randomNumber);
+        } else if (isCholletStar()) {
+            this.color = Color.PINK;
+        } else {
+            this.color = Color.WHITE;
+        }
     }
 
     public Color getColor() {
@@ -77,26 +88,30 @@ public class Star {
         angularSize /= fovAngleX; // Pour convertir en format normalisé
     }
 
+    public boolean isVisitable() {
+        return isVisitable;
+    }
+
+    public boolean isCholletStar() {
+        return isChollet;
+    }
+
+    public boolean isDecorative() {return isDecorative;}
+
+    public boolean starIsInZone(float[] zone) {
+        return coords.isInZone(zone);
+    }
+
+    public boolean isParasite() {
+        return isParasite;
+    }
+
     public void visit() {
-        visited = isVisitable;
+        visited = isVisitable();
+        TrueStar.augmenterNbVisites();
     }
 
     public boolean isVisited() {
         return visited;
     }
-
-    public boolean isVisitable() {
-        return isVisitable;
-    }
-
-    @Override
-    public String toString() {
-        return visited ? "Visited" : "Not Visited";
-    }
-
-    public boolean isCholletStar() {
-        return false;
-    }
-
-    public boolean isDecorative() {return false;}
 }

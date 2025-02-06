@@ -36,7 +36,7 @@ public class Main extends Game {
     }
 
     public void render() {
-        super.render(); // important!
+        super.render();// important!
     }
 
     public void dispose() {

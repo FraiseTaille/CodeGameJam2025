@@ -3,8 +3,7 @@ package fr.bloomyindev.cgj2024;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import fr.bloomyindev.cgj2024.CoordinateSystems.FieldOfViewCoords;
+import fr.bloomyindev.cgj2024.stars.Star;
 
 public class SoundManager {
 
@@ -33,13 +32,11 @@ public class SoundManager {
             music.setVolume(0);
             musicWMel.setVolume(vol);
             musicTroll.setVolume(0f);
-            System.out.println(vol);
         } else if (star.isCholletStar() && distance <= 10000) {
             float vol = calculateVolumeWithDistance(distance);
             musicTroll.setVolume(vol);
             music.setVolume(0f);
-            System.out.println(vol);
-        } else if (!star.isVisitable() && !star.isCholletStar() && distance <= 10000 && !star.isDecorative()) {
+        } else if (star.isParasite() && distance <= 10000) {
             float vol = calculateVolumeWithDistance(distance);
             music.setVolume(0);
             if (distance <= 300) {
@@ -52,7 +49,6 @@ public class SoundManager {
                 musicWMel.setVolume(vol);
             }
             musicTroll.setVolume(0f);
-            System.out.println(vol);
         } else {
             float k = (float) ((float) 10000 / Math.sqrt(19));
             music.setVolume((float) (1.0 / (1 + Math.pow(10000 / k, 2))));
@@ -63,7 +59,7 @@ public class SoundManager {
     }
 
     private float calculateVolumeWithDistance(long distance) {
-        float k = (float) ((float) 10000 / Math.sqrt(19));
-        return (float) ((float) 1 / (1 + Math.pow(distance / k, 2)));
+        float k = (float) (10000 / Math.sqrt(19));
+        return (float) (1 / (1 + Math.pow(distance / k, 2)));
     }
 }

@@ -47,4 +47,28 @@ public class AbsoluteCoords3D {
 		this.y = 0.f;
 		this.z = 0.f;
 	}
+
+    public float[] get20kX20kZone() {
+        return new float[]{x - 10000, x + 10000, y - 10000, y + 10000};
+    }
+
+    public boolean identicalZones(float[] other20kX20kZone) {
+        if (other20kX20kZone.length != 4) {
+            return false;
+        } else {
+            boolean identical = true;
+            int i = 0;
+            while (i < get20kX20kZone().length && identical) {
+                if (get20kX20kZone()[i] != other20kX20kZone[i]) {
+                    identical = false;
+                }
+                i++;
+            }
+            return identical;
+        }
+    }
+
+    public boolean isInZone(float[] zone) {
+        return x >= zone[0] && x <= zone[1] && y >= zone[2] && y <= zone[3];
+    }
 }
