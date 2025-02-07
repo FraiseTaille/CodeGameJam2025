@@ -7,14 +7,11 @@ import fr.bloomyindev.cgj2024.stars.Star;
 
 public class SoundManager {
 
-    private static float maxVolume = 1f;
     private static Music music = Gdx.audio.newMusic(Gdx.files.internal("eq9nomel-16.wav"));
     private static Music musicWMel = Gdx.audio.newMusic(Gdx.files.internal("eq9mel-16.wav"));
     private static Music musicTroll = Gdx.audio.newMusic(Gdx.files.internal("ACLong.mp3"));
-    private AudioDevice audio;
 
     public SoundManager(AudioDevice audio) {
-        this.audio = audio;
         music.setVolume(.5f);
         musicWMel.setVolume(0f);
         musicTroll.setVolume(0f);
