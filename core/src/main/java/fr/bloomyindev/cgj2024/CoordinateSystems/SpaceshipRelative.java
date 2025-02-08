@@ -1,6 +1,6 @@
 package fr.bloomyindev.cgj2024.CoordinateSystems;
 
-import fr.bloomyindev.cgj2024.stars.Star;
+import fr.bloomyindev.cgj2024.Stars.Star;
 import fr.bloomyindev.cgj2024.Ut;
 
 import java.util.ArrayList;
@@ -10,11 +10,24 @@ public class SpaceshipRelative {
 	private float lat, lng;
 	private float xRel, yRel, zRel;
 	private long distance;
+    private long smallestDistance;
 
 	public SpaceshipRelative(AbsoluteCoords3D coords3d, AbsoluteCoords3D spaceshipCoords3d) {
 		this.coords3d = coords3d;
 		this.reComputeRelativeCoords(spaceshipCoords3d);
+        smallestDistance = 1000000;
 	}
+
+    public SpaceshipRelative(SpaceshipRelative spaceshipRelative) {
+        this.coords3d = new AbsoluteCoords3D(spaceshipRelative.coords3d);
+        this.lat = spaceshipRelative.lat;
+        this.lng = spaceshipRelative.lng;
+        this.xRel = spaceshipRelative.xRel;
+        this.yRel = spaceshipRelative.yRel;
+        this.zRel = spaceshipRelative.zRel;
+        this.distance = spaceshipRelative.distance;
+        this.smallestDistance = spaceshipRelative.smallestDistance;
+    }
 
 	public long getDistance() {
 		return this.distance;
@@ -57,6 +70,20 @@ public class SpaceshipRelative {
 			this.lng = 0;
 		}
 	}
+
+    public void updateSmallestDistance() {
+        if (distance < smallestDistance) {
+            smallestDistance = distance;
+        }
+    }
+
+    public long getSmallestDistance() {
+        return smallestDistance;
+    }
+
+    public static long getDeltaDistance(long distance1, long distance2) {
+        return distance1 - distance2;
+    }
 
     public static int smallestDistanceStarId(ArrayList<SpaceshipRelative> spaceshipRelativeToStars, ArrayList<Star> stars, boolean notVisitedOnly) {
         int i = 0;

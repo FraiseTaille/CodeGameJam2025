@@ -1,4 +1,4 @@
-package fr.bloomyindev.cgj2024.screen;
+package fr.bloomyindev.cgj2024.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import fr.bloomyindev.cgj2024.*;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
-import fr.bloomyindev.cgj2024.stars.*;
-
-import java.util.ArrayList;
+import fr.bloomyindev.cgj2024.Tools.StarManagement;
+import fr.bloomyindev.cgj2024.Stars.*;
+import fr.bloomyindev.cgj2024.Tools.StarSniffer;
 
 public class GameScreen implements Screen {
     final Main game;
@@ -27,6 +27,10 @@ public class GameScreen implements Screen {
     private Texture dangerTexture;
     private Sprite dangerSprite;
     private BitmapFont coord;
+    private Texture leftTexture;
+    private Sprite leftSprite;
+    private Texture rightTexture;
+    private Sprite rightSprite;
 
     public GameScreen(final Main game) {
         this.game = game;
@@ -41,9 +45,18 @@ public class GameScreen implements Screen {
 
         dangerTexture = new Texture(Gdx.files.internal("danger.png"));
         dangerSprite = new Sprite(dangerTexture);
-
         dangerSprite.setSize(0.44f, 0.44f);
         dangerSprite.setPosition(6.9f, 2.34f);
+
+        leftTexture = new Texture(Gdx.files.internal("left.png"));
+        leftSprite = new Sprite(leftTexture);
+        leftSprite.setSize(0.44f, 0.44f);
+        leftSprite.setPosition(6f, 2.34f);
+
+        rightTexture = new Texture(Gdx.files.internal("right.png"));
+        rightSprite = new Sprite(rightTexture);
+        rightSprite.setSize(0.44f, 0.44f);
+        rightSprite.setPosition(9.65f, 2.34f);
 
         StarManagement.spawnStars(spaceship, fov);
         //System.out.println(stars);
@@ -103,9 +116,13 @@ public class GameScreen implements Screen {
 
     private void collisionManagement(float delta) {
         StarManagement.updateIdClosestStar(false);
-        FieldOfViewCoords closestStarCoord = StarManagement.getCoordInStarCoords(StarManagement.getIdClosestStar());
-        SpaceshipRelative spaceshipRelativeToClosestStar = StarManagement.getSpaceshipRelativeInList(StarManagement.getIdClosestStar());
-        Star star = StarManagement.getStarInStarsList(StarManagement.getIdClosestStar());
+
+        int idClosestStar = StarManagement.getIdClosestStar();
+
+        FieldOfViewCoords closestStarCoord = StarManagement.getCoordInStarCoords(idClosestStar);
+        SpaceshipRelative spaceshipRelativeToClosestStar = StarManagement.getSpaceshipRelativeInList(idClosestStar);
+        Star star = StarManagement.getStarInStarsList(idClosestStar);
+
         if (closestStarCoord.getVisibility() && spaceshipRelativeToClosestStar.getDistance() <= 6L * star.getAbsoluteRadius()) {
             if (spaceship.getSpeed() < 0) {
                 spaceship.setSpeed(0);
@@ -127,6 +144,7 @@ public class GameScreen implements Screen {
         //System.out.println(spaceshipRelativeToStars.get(idClosestStar).getDistance());
 
         game.soundManager.playSound(StarManagement.getSpaceshipRelativeInList(StarManagement.getIdClosestStar()).getDistance(), StarManagement.getStarInStarsList(StarManagement.getIdClosestStar()));
+
         for (int i = 0; i < StarManagement.getStarsCoords().size(); i++) {
             SpaceshipRelative relCoords = StarManagement.getSpaceshipRelativeInList(i);
             relCoords.reComputeRelativeCoords(spaceship.getSpaceshipCoord());
@@ -142,9 +160,6 @@ public class GameScreen implements Screen {
                 }
             }
         }
-
-        //System.out.println(spaceship.getSpaceshipCoord().getCoords()[0] + " " + spaceship.getSpaceshipCoord().getCoords()[1] + " " + spaceship.getSpaceshipCoord().getCoords()[2]);
-        System.out.println(spaceship.getSpeed());
     }
 
     private void setVisit(Star star, int index) {
@@ -165,6 +180,47 @@ public class GameScreen implements Screen {
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
 
+        drawStars();
+
+        game.shape.end();
+        game.sprite.begin();
+
+        //float worldWidth = game.viewport.getWorldWidth();
+        //float worldHeight = game.viewport.getWorldHeight();
+
+        cockpitSprite.draw(game.sprite);
+        game.font.draw(game.sprite, String.format("Yaw %f\nPitch %f", spaceship.getYaw(), spaceship.getPitch()), 7.5f, 2.75f);
+
+        float[] coords = spaceship.getSpaceshipCoord().getCoords();
+
+        coord.draw(game.sprite, String.format("%d", (int) coords[0]), 6.6f, 7.9f);
+        coord.draw(game.sprite, String.format("%d", (int) coords[1]), 7.6f, 7.9f);
+        coord.draw(game.sprite, String.format("%d", (int) coords[2]), 8.6f, 7.9f);
+
+        StarManagement.updateIdClosestStar(true);
+        int idClosestStar = StarManagement.getIdClosestStar();
+        //game.font.draw(game.sprite, String.format("%d", StarManagement.getSpaceshipRelativeInList(idClosestStar).getDistance()), 3f, 1f);
+
+        if (StarManagement.getStarInStarsList(idClosestStar).isParasite() && StarManagement.getSpaceshipRelativeInList(idClosestStar).getDistance() < 300) {
+            dangerSprite.draw(game.sprite);
+        }
+
+        StarSniffer.updateSpaceshipRelClosestStar();
+        if (StarSniffer.shipMovesAway()) {
+            long[] theoricalDistances = StarSniffer.getTheoricalDistances(spaceship);
+            if (StarSniffer.getBestDistance(theoricalDistances) == 0) {
+                leftSprite.draw(game.sprite);
+            } else if (StarSniffer.getBestDistance(theoricalDistances) == 1) {
+                rightSprite.draw(game.sprite);
+            }
+        }
+
+        game.font.draw(game.sprite, String.format("Étoiles visitées : %d / 10", TrueStar.getNbVisites()), 8f, 1f);
+
+        game.sprite.end();
+    }
+
+    private void drawStars() {
         for (int i = StarManagement.getSpaceshipRelativeToStars().size()-1; i > -1; i--) {
             FieldOfViewCoords starFOVCoords = StarManagement.getCoordInStarCoords(i);
             float[] normalisedCoords = starFOVCoords.getNormalisedCoords();
@@ -181,35 +237,6 @@ public class GameScreen implements Screen {
                 }
             }
         }
-
-        game.shape.end();
-        game.sprite.begin();
-
-        //float worldWidth = game.viewport.getWorldWidth();
-        //float worldHeight = game.viewport.getWorldHeight();
-
-        cockpitSprite.draw(game.sprite);
-        game.font.draw(game.sprite, String.format("Yaw %f\nPitch %f", spaceship.getYaw(), spaceship.getPitch()), 7.5f,
-                2.75f);
-
-        float[] coords = spaceship.getSpaceshipCoord().getCoords();
-
-        coord.draw(game.sprite, String.format("%d", (int) coords[0]), 6.6f, 7.9f);
-        coord.draw(game.sprite, String.format("%d", (int) coords[1]), 7.6f, 7.9f);
-        coord.draw(game.sprite, String.format("%d", (int) coords[2]), 8.6f, 7.9f);
-
-        StarManagement.updateIdClosestStar(true);
-        game.font.draw(game.sprite, String.format("%d", StarManagement.getSpaceshipRelativeInList(StarManagement.getIdClosestStar()).getDistance()), 3f, 1f);
-
-        if (!StarManagement.getStarInStarsList(StarManagement.getIdClosestStar()).isVisitable() &&
-            !StarManagement.getStarInStarsList(StarManagement.getIdClosestStar()).isCholletStar() &&
-            StarManagement.getSpaceshipRelativeInList(StarManagement.getIdClosestStar()).getDistance() < 300) {
-            dangerSprite.draw(game.sprite);
-        }
-
-        game.font.draw(game.sprite, String.format("Étoiles visitées : %d / 10", TrueStar.getNbVisites()), 8f, 1f);
-
-        game.sprite.end();
     }
 
     @Override

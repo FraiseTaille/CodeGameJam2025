@@ -1,4 +1,4 @@
-package fr.bloomyindev.cgj2024.screen;
+package fr.bloomyindev.cgj2024.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

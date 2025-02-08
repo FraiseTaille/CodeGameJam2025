@@ -16,6 +16,13 @@ public class Spaceship {
         this.speed = 0;
     }
 
+    public Spaceship(Spaceship spaceship) {
+        this.spaceshipCoord = new AbsoluteCoords3D(spaceship.getSpaceshipCoord());
+        this.pitch = spaceship.getPitch();
+        this.yaw = spaceship.getYaw();
+        this.speed = spaceship.getSpeed();
+    }
+
     public float getSpeed() {
         return speed;
     }

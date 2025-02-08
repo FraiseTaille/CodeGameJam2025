@@ -1,16 +1,12 @@
-package fr.bloomyindev.cgj2024.screen;
+package fr.bloomyindev.cgj2024.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fr.bloomyindev.cgj2024.Main;
-
-import java.util.ArrayList;
 
 public class CreditsScreen implements Screen {
     final Main game;

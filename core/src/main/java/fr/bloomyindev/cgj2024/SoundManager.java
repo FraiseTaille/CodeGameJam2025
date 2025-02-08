@@ -3,7 +3,7 @@ package fr.bloomyindev.cgj2024;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
-import fr.bloomyindev.cgj2024.stars.Star;
+import fr.bloomyindev.cgj2024.Stars.Star;
 
 public class SoundManager {
 

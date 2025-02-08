@@ -11,6 +11,12 @@ public class AbsoluteCoords3D {
 		this.z = z;
 	}
 
+    public AbsoluteCoords3D(AbsoluteCoords3D coords3D) {
+        this.x = coords3D.x;
+        this.y = coords3D.y;
+        this.z = coords3D.z;
+    }
+
 	public float[] getCoords() {
 		return new float[]{this.x, this.y, this.z};
 	}

@@ -1,4 +1,4 @@
-package fr.bloomyindev.cgj2024.stars;
+package fr.bloomyindev.cgj2024.Stars;
 
 import fr.bloomyindev.cgj2024.CoordinateSystems.AbsoluteCoords3D;
 

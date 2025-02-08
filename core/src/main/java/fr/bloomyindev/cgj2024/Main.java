@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import fr.bloomyindev.cgj2024.screen.MainMenuScreen;
+import fr.bloomyindev.cgj2024.Screen.MainMenuScreen;
 
 
 public class Main extends Game {
