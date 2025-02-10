@@ -13,8 +13,6 @@ import java.util.ArrayList;
 public final class StarManagement {
     private static ArrayList<Star> stars = new ArrayList<>();
     private static ArrayList<FieldOfViewCoords> starsCoords = new ArrayList<>();
-    private static ArrayList<SpaceshipRelative> spaceshipRelativeToStars = new ArrayList<>();
-    private static int idClosestStar = -1;
     private static float[] zone20kX20k = new float[4];
     private static boolean backToCenter = false;
     private static int nbRemovedStars = 0;
@@ -22,12 +20,12 @@ public final class StarManagement {
     public StarManagement() {}
 
     public static void spawnStars(Spaceship spaceship, FieldOfView fov) {
-        stars.add(new Chollet(new AbsoluteCoords3D(Ut.randomMinMax(-50000, 50000), Ut.randomMinMax(-50000, 50000),0), 1));
+        stars.add(new Chollet(new AbsoluteCoords3D(Ut.randomMinMax(-100000, 100000), Ut.randomMinMax(-100000, 100000),0), 1));
         for (int i = 0; i < 15; i++) {
             boolean confirmedStar = false;
             while (!confirmedStar) {
-                AbsoluteCoords3D coordinates = AbsoluteCoords3D.generateNewRandomCoordinates(-50000, 50000, -50000,
-                    50000, 0, 0);
+                AbsoluteCoords3D coordinates = AbsoluteCoords3D.generateNewRandomCoordinates(-100000, 100000, -10000,
+                    100000, 0, 0);
                 Star star;
                 if (i <= 10) {
                     star = new TrueStar(coordinates, 1);
@@ -41,7 +39,7 @@ public final class StarManagement {
                     int j = 0;
                     while (allConfirmed && j < stars.size()) {
                         Star starTest = stars.get(j);
-                        if (star.distanceBetween(starTest) < 10000) {
+                        if (star.distanceBetween(starTest) < 25000) {
                             allConfirmed = false;
                         }
                         j++;
@@ -56,17 +54,9 @@ public final class StarManagement {
             }
         }
         for (Star star : stars) {
-            spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-            starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+            GPS.addSpaceshipRelativeToStar(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
+            starsCoords.add(new FieldOfViewCoords(fov, GPS.getSpaceshipRelativeInList(GPS.getSpaceshipRelativeToStars().size() - 1)));
         }
-    }
-
-    public static void updateIdClosestStar(boolean notVisitedOnly) {
-        idClosestStar = SpaceshipRelative.smallestDistanceStarId(spaceshipRelativeToStars, stars, notVisitedOnly);
-    }
-
-    public static int getIdClosestStar() {
-        return idClosestStar;
     }
 
     public static void generateStarsInDelimitedZone(Spaceship spaceship, FieldOfView fov) {
@@ -77,7 +67,7 @@ public final class StarManagement {
                 for (int i = 0; i < starsCoords.size(); i++) {
                     if (stars.get(i).starIsInZone(zone20kX20k) && stars.get(i).isDecorative()) {
                         stars.remove(i);
-                        spaceshipRelativeToStars.remove(i);
+                        GPS.removeSpaceshipRelativeToStar(i);
                         starsCoords.remove(i);
                         i--;
                     }
@@ -117,7 +107,7 @@ public final class StarManagement {
                 }
                 updateZone = true;
             }
-            if (newZone20kX20k[3] > zone20kX20k[3] + newPartSize && newZone20kX20k[3] <= 50000) {
+            if (newZone20kX20k[3] > zone20kX20k[3] + newPartSize) {
                 for (int j = 0; j < nb; j++) {
                     AbsoluteCoords3D coordinates = AbsoluteCoords3D.generateNewRandomCoordinates((int) zone20kX20k[0], (int) zone20kX20k[1],
                         (int) zone20kX20k[3], (int) zone20kX20k[3] + 1, -3000, 3000);
@@ -138,11 +128,11 @@ public final class StarManagement {
     }
 
     private static void generateNewDecorativeStar(AbsoluteCoords3D coordinates, Spaceship spaceship, FieldOfView fov) {
-        if (coordinates.getCoords()[0] <= 50000 && coordinates.getCoords()[0] >= -50000 && coordinates.getCoords()[1] <= 50000 && coordinates.getCoords()[1] >= -50000) {
+        if (coordinates.getCoords()[0] <= 100000 && coordinates.getCoords()[0] >= -100000 && coordinates.getCoords()[1] <= 100000 && coordinates.getCoords()[1] >= -100000) {
             Star star = new DecorativeStar(coordinates, 1);
             stars.add(star);
-            spaceshipRelativeToStars.add(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
-            starsCoords.add(new FieldOfViewCoords(fov, spaceshipRelativeToStars.get(spaceshipRelativeToStars.size() - 1)));
+            GPS.addSpaceshipRelativeToStar(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
+            starsCoords.add(new FieldOfViewCoords(fov, GPS.getSpaceshipRelativeInList(GPS.getSpaceshipRelativeToStars().size() - 1)));
         }
     }
 
@@ -150,7 +140,7 @@ public final class StarManagement {
         for (int i = 0; i < starsCoords.size(); i++) {
             if (!stars.get(i).starIsInZone(zone20kX20k) && stars.get(i).isDecorative()) {
                 stars.remove(i);
-                spaceshipRelativeToStars.remove(i);
+                GPS.removeSpaceshipRelativeToStar(i);
                 starsCoords.remove(i);
                 i--;
                 nbRemovedStars++;
@@ -176,13 +166,5 @@ public final class StarManagement {
 
     public static FieldOfViewCoords getCoordInStarCoords(int index) {
         return starsCoords.get(index);
-    }
-
-    public static ArrayList<SpaceshipRelative> getSpaceshipRelativeToStars() {
-        return spaceshipRelativeToStars;
-    }
-
-    public static SpaceshipRelative getSpaceshipRelativeInList(int index) {
-        return spaceshipRelativeToStars.get(index);
     }
 }

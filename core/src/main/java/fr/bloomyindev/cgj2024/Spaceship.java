@@ -92,4 +92,8 @@ public class Spaceship {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
 }

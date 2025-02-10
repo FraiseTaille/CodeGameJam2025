@@ -14,7 +14,7 @@ import fr.bloomyindev.cgj2024.*;
 import fr.bloomyindev.cgj2024.CoordinateSystems.*;
 import fr.bloomyindev.cgj2024.Tools.StarManagement;
 import fr.bloomyindev.cgj2024.Stars.*;
-import fr.bloomyindev.cgj2024.Tools.StarSniffer;
+import fr.bloomyindev.cgj2024.Tools.GPS;
 
 public class GameScreen implements Screen {
     final Main game;
@@ -31,6 +31,8 @@ public class GameScreen implements Screen {
     private Sprite leftSprite;
     private Texture rightTexture;
     private Sprite rightSprite;
+    private int nbRepetitions;
+    private int leftRight;
 
     public GameScreen(final Main game) {
         this.game = game;
@@ -64,6 +66,9 @@ public class GameScreen implements Screen {
         coord = new BitmapFont();
         coord.setUseIntegerPositions(false);
         coord.getData().setScale(0.02f);
+
+        nbRepetitions = 0;
+        leftRight = -1;
     }
 
     @Override
@@ -115,12 +120,12 @@ public class GameScreen implements Screen {
     }
 
     private void collisionManagement(float delta) {
-        StarManagement.updateIdClosestStar(false);
+        GPS.updateIdClosestStar(false);
 
-        int idClosestStar = StarManagement.getIdClosestStar();
+        int idClosestStar = GPS.getIdClosestStar();
 
         FieldOfViewCoords closestStarCoord = StarManagement.getCoordInStarCoords(idClosestStar);
-        SpaceshipRelative spaceshipRelativeToClosestStar = StarManagement.getSpaceshipRelativeInList(idClosestStar);
+        SpaceshipRelative spaceshipRelativeToClosestStar = GPS.getSpaceshipRelativeInList(idClosestStar);
         Star star = StarManagement.getStarInStarsList(idClosestStar);
 
         if (closestStarCoord.getVisibility() && spaceshipRelativeToClosestStar.getDistance() <= 6L * star.getAbsoluteRadius()) {
@@ -139,14 +144,14 @@ public class GameScreen implements Screen {
 
         StarManagement.generateStarsInDelimitedZone(spaceship, fov);
 
-        StarManagement.updateIdClosestStar(true);
+        GPS.updateIdClosestStar(true);
         //System.out.println(idClosestStar);
         //System.out.println(spaceshipRelativeToStars.get(idClosestStar).getDistance());
 
-        game.soundManager.playSound(StarManagement.getSpaceshipRelativeInList(StarManagement.getIdClosestStar()).getDistance(), StarManagement.getStarInStarsList(StarManagement.getIdClosestStar()));
+        game.soundManager.playSound(GPS.getSpaceshipRelativeInList(GPS.getIdClosestStar()).getDistance(), StarManagement.getStarInStarsList(GPS.getIdClosestStar()));
 
         for (int i = 0; i < StarManagement.getStarsCoords().size(); i++) {
-            SpaceshipRelative relCoords = StarManagement.getSpaceshipRelativeInList(i);
+            SpaceshipRelative relCoords = GPS.getSpaceshipRelativeInList(i);
             relCoords.reComputeRelativeCoords(spaceship.getSpaceshipCoord());
 
             FieldOfViewCoords FOVCoords = StarManagement.getCoordInStarCoords(i);
@@ -163,7 +168,7 @@ public class GameScreen implements Screen {
     }
 
     private void setVisit(Star star, int index) {
-        if (StarManagement.getSpaceshipRelativeInList(index).getDistance() <= 7L * star.getAbsoluteRadius() && star.isVisitable() && !star.isVisited()) {
+        if (GPS.getSpaceshipRelativeInList(index).getDistance() <= 7L * star.getAbsoluteRadius() && star.isVisitable() && !star.isVisited()) {
             star.visit();
         }
     }
@@ -197,23 +202,15 @@ public class GameScreen implements Screen {
         coord.draw(game.sprite, String.format("%d", (int) coords[1]), 7.6f, 7.9f);
         coord.draw(game.sprite, String.format("%d", (int) coords[2]), 8.6f, 7.9f);
 
-        StarManagement.updateIdClosestStar(true);
-        int idClosestStar = StarManagement.getIdClosestStar();
+        GPS.updateIdClosestStar(true);
+        int idClosestStar = GPS.getIdClosestStar();
         //game.font.draw(game.sprite, String.format("%d", StarManagement.getSpaceshipRelativeInList(idClosestStar).getDistance()), 3f, 1f);
 
-        if (StarManagement.getStarInStarsList(idClosestStar).isParasite() && StarManagement.getSpaceshipRelativeInList(idClosestStar).getDistance() < 300) {
+        if (StarManagement.getStarInStarsList(idClosestStar).isParasite() && GPS.getSpaceshipRelativeInList(idClosestStar).getDistance() < 300) {
             dangerSprite.draw(game.sprite);
         }
 
-        StarSniffer.updateSpaceshipRelClosestStar();
-        if (StarSniffer.shipMovesAway()) {
-            long[] theoricalDistances = StarSniffer.getTheoricalDistances(spaceship);
-            if (StarSniffer.getBestDistance(theoricalDistances) == 0) {
-                leftSprite.draw(game.sprite);
-            } else if (StarSniffer.getBestDistance(theoricalDistances) == 1) {
-                rightSprite.draw(game.sprite);
-            }
-        }
+        drawGPS();
 
         game.font.draw(game.sprite, String.format("Étoiles visitées : %d / 10", TrueStar.getNbVisites()), 8f, 1f);
 
@@ -221,7 +218,7 @@ public class GameScreen implements Screen {
     }
 
     private void drawStars() {
-        for (int i = StarManagement.getSpaceshipRelativeToStars().size()-1; i > -1; i--) {
+        for (int i = GPS.getSpaceshipRelativeToStars().size() -1; i > -1; i--) {
             FieldOfViewCoords starFOVCoords = StarManagement.getCoordInStarCoords(i);
             float[] normalisedCoords = starFOVCoords.getNormalisedCoords();
 
@@ -230,11 +227,38 @@ public class GameScreen implements Screen {
 
             if (starFOVCoords.getVisibility()) {
                 Star star = StarManagement.getStarInStarsList(i);
-                SpaceshipRelative relCoords = StarManagement.getSpaceshipRelativeInList(i);
+                SpaceshipRelative relCoords = GPS.getSpaceshipRelativeInList(i);
 
                 if (relCoords.getDistance() < 10000) {
                     star.render(game.shape, normalisedCoords[0], normalisedCoords[1], relCoords.getDistance(), fovAngle);
                 }
+            }
+        }
+    }
+
+    private void drawGPS() {
+        GPS.updateSpaceshipRelClosestStar();
+        if (GPS.shipMovesAway(spaceship)) {
+            long[] theoricalDistances = GPS.getTheoricalDistances(spaceship);
+            if (GPS.getBestDistance(theoricalDistances) == 0) {
+                leftSprite.draw(game.sprite);
+                leftRight = 0;
+                nbRepetitions = 0;
+            } else if (GPS.getBestDistance(theoricalDistances) == 1) {
+                rightSprite.draw(game.sprite);
+                leftRight = 1;
+                nbRepetitions = 0;
+            }
+        } else {
+            if (leftRight == 0 && nbRepetitions < 100) {
+                leftSprite.draw(game.sprite);
+                nbRepetitions++;
+            } else if (leftRight == 1 && nbRepetitions < 100) {
+                rightSprite.draw(game.sprite);
+                nbRepetitions++;
+            } else {
+                leftRight = -1;
+                nbRepetitions = 0;
             }
         }
     }

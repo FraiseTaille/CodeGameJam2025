@@ -10,12 +10,14 @@ public class SpaceshipRelative {
 	private float lat, lng;
 	private float xRel, yRel, zRel;
 	private long distance;
+    private long previousDistance;
     private long smallestDistance;
 
 	public SpaceshipRelative(AbsoluteCoords3D coords3d, AbsoluteCoords3D spaceshipCoords3d) {
 		this.coords3d = coords3d;
 		this.reComputeRelativeCoords(spaceshipCoords3d);
         smallestDistance = 1000000;
+        previousDistance = 1000000;
 	}
 
     public SpaceshipRelative(SpaceshipRelative spaceshipRelative) {
@@ -60,6 +62,8 @@ public class SpaceshipRelative {
 		this.yRel = Delta3D[1];
 		this.zRel = Delta3D[2];
 
+        previousDistance = distance;
+
 		this.distance = (long)Math.sqrt(Ut.pow(xRel, 2.0f) + Ut.pow(yRel, 2.0f) + Ut.pow(zRel, 2.0f)); // Distance de l'étoile au vaisseau
 
 		if (distance != 0) {
@@ -77,25 +81,15 @@ public class SpaceshipRelative {
         }
     }
 
+    public long getPreviousDistance() {
+        return previousDistance;
+    }
+
     public long getSmallestDistance() {
         return smallestDistance;
     }
 
     public static long getDeltaDistance(long distance1, long distance2) {
         return distance1 - distance2;
-    }
-
-    public static int smallestDistanceStarId(ArrayList<SpaceshipRelative> spaceshipRelativeToStars, ArrayList<Star> stars, boolean notVisitedOnly) {
-        int i = 0;
-        for (int j = 0; j < 16; j++) {
-            if (spaceshipRelativeToStars.get(j).getDistance() < spaceshipRelativeToStars.get(i).getDistance()) {
-                if (notVisitedOnly && !stars.get(j).isVisited()) {
-                    i = j;
-                } else if (!notVisitedOnly) {
-                    i = j;
-                }
-            }
-        }
-        return i;
     }
 }
