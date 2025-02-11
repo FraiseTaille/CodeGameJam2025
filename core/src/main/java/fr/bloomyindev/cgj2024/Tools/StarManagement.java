@@ -20,12 +20,12 @@ public final class StarManagement {
     public StarManagement() {}
 
     public static void spawnStars(Spaceship spaceship, FieldOfView fov) {
-        stars.add(new Chollet(new AbsoluteCoords3D(Ut.randomMinMax(-100000, 100000), Ut.randomMinMax(-100000, 100000),0), 1));
+        stars.add(new Chollet(new AbsoluteCoords3D(Ut.randomMinMax(-200000, 200000), Ut.randomMinMax(-200000, 200000),0), 1));
         for (int i = 0; i < 15; i++) {
             boolean confirmedStar = false;
             while (!confirmedStar) {
-                AbsoluteCoords3D coordinates = AbsoluteCoords3D.generateNewRandomCoordinates(-100000, 100000, -10000,
-                    100000, 0, 0);
+                AbsoluteCoords3D coordinates = AbsoluteCoords3D.generateNewRandomCoordinates(-200000, 200000, -20000,
+                    200000, 0, 0);
                 Star star;
                 if (i <= 10) {
                     star = new TrueStar(coordinates, 1);
@@ -39,7 +39,7 @@ public final class StarManagement {
                     int j = 0;
                     while (allConfirmed && j < stars.size()) {
                         Star starTest = stars.get(j);
-                        if (star.distanceBetween(starTest) < 25000) {
+                        if (star.distanceBetween(starTest) < 50000) {
                             allConfirmed = false;
                         }
                         j++;
@@ -128,7 +128,7 @@ public final class StarManagement {
     }
 
     private static void generateNewDecorativeStar(AbsoluteCoords3D coordinates, Spaceship spaceship, FieldOfView fov) {
-        if (coordinates.getCoords()[0] <= 100000 && coordinates.getCoords()[0] >= -100000 && coordinates.getCoords()[1] <= 100000 && coordinates.getCoords()[1] >= -100000) {
+        if (coordinates.getCoords()[0] <= 200000 && coordinates.getCoords()[0] >= -200000 && coordinates.getCoords()[1] <= 200000 && coordinates.getCoords()[1] >= -200000) {
             Star star = new DecorativeStar(coordinates, 1);
             stars.add(star);
             GPS.addSpaceshipRelativeToStar(new SpaceshipRelative(star.getCoordinates(), spaceship.getSpaceshipCoord()));
