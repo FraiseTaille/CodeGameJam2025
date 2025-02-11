@@ -8,12 +8,18 @@ public class Spaceship {
     private float pitch;
     private float yaw;
     private float speed;
+    private float speedX;
+    private float speedY;
+    private float speedZ;
 
     public Spaceship(AbsoluteCoords3D spaceshipCoord, float pitch, float yaw) {
         this.spaceshipCoord = spaceshipCoord;
         this.pitch = pitch;
         this.yaw = yaw;
         this.speed = 0;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.speedZ = 0;
     }
 
     public Spaceship(Spaceship spaceship) {
@@ -77,16 +83,18 @@ public class Spaceship {
         this.speed = MathUtils.clamp(this.speed + delta, -20, 20);
     }
 
+    public void updateSpeedCoords() {
+        speedZ += (float) Math.sin(this.pitch) * this.speed;
+        speedY += (float) Math.sin(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
+        speedX += (float) Math.cos(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
+    }
+
     public void move() {
-        if (speed == 0) {
-            return;
-        }
-
-        float speedZ = (float) Math.sin(this.pitch) * this.speed;
-        float speedY = (float) Math.sin(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
-        float speedX = (float) Math.cos(this.yaw) * (float) Math.cos(this.pitch) * this.speed;
-
         this.spaceshipCoord.move(speedX, speedY, speedZ);
+
+        speedZ = 0;
+        speedY = 0;
+        speedX = 0;
     }
 
     public void setSpeed(float speed) {
@@ -95,5 +103,14 @@ public class Spaceship {
 
     public void setYaw(float yaw) {
         this.yaw = yaw;
+    }
+
+    public void adjustMovement(float adjustmentYaw, float adjustmentSpeed) {
+        speedX += (float) Math.cos(adjustmentYaw) * (float) Math.cos(this.pitch) * adjustmentSpeed;
+        if (speedX > 20) speedX = 20;
+        if (speedX < -20) speedX = -20;
+        speedY += (float) Math.sin(adjustmentYaw) * (float) Math.cos(this.pitch) * adjustmentSpeed;
+        if (speedY > 20) speedY = 20;
+        if (speedY < -20) speedY = -20;
     }
 }

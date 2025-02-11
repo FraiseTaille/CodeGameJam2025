@@ -75,6 +75,10 @@ public class SpaceshipRelative {
 		}
 	}
 
+    public float getLng() {
+        return this.lng;
+    }
+
     public void updateSmallestDistance() {
         if (distance < smallestDistance) {
             smallestDistance = distance;

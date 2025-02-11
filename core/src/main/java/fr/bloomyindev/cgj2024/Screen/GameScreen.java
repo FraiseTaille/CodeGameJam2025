@@ -140,11 +140,20 @@ public class GameScreen implements Screen {
     }
 
     private void logic() {
+        spaceship.updateSpeedCoords();
+
+        GPS.updateIdClosestStar(true);
+
+        if (GPS.getClosestStar().isParasite() && GPS.getClosestStarRelative().getDistance() <= 10000) {
+            float parasiteYaw = GPS.getClosestStarRelative().getLng();
+            float speedToParasite = (-10f) / 10000f * (10000f - (float) GPS.getClosestStarRelative().getDistance());
+            spaceship.adjustMovement(parasiteYaw, speedToParasite);
+        }
+
         spaceship.move();
 
         StarManagement.generateStarsInDelimitedZone(spaceship, fov);
 
-        GPS.updateIdClosestStar(true);
         //System.out.println(idClosestStar);
         //System.out.println(spaceshipRelativeToStars.get(idClosestStar).getDistance());
 

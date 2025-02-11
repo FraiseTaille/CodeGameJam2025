@@ -3,6 +3,7 @@ package fr.bloomyindev.cgj2024.Tools;
 import fr.bloomyindev.cgj2024.CoordinateSystems.AbsoluteCoords3D;
 import fr.bloomyindev.cgj2024.CoordinateSystems.SpaceshipRelative;
 import fr.bloomyindev.cgj2024.Spaceship;
+import fr.bloomyindev.cgj2024.Stars.Star;
 
 import java.util.ArrayList;
 
@@ -119,5 +120,13 @@ public final class GPS {
 
     public static void removeSpaceshipRelativeToStar(int index) {
         spaceshipRelativeToStars.remove(index);
+    }
+
+    public static Star getClosestStar() {
+        return StarManagement.getStarInStarsList(idClosestStar);
+    }
+
+    public static SpaceshipRelative getClosestStarRelative() {
+        return spaceshipRelativeToStars.get(idClosestStar);
     }
 }
