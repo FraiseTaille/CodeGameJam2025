@@ -8,7 +8,7 @@ import fr.bloomyindev.cgj2024.Stars.Star;
 import java.util.ArrayList;
 
 public final class GPS {
-    private static SpaceshipRelative spaceshipRelClosestStar ;
+    private static SpaceshipRelative spaceshipRelClosestStar;
     private static int idClosestStar = -1;
     private static ArrayList<SpaceshipRelative> spaceshipRelativeToStars = new ArrayList<>();
     private static AbsoluteCoords3D shipCoords;

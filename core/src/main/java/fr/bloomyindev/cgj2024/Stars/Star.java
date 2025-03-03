@@ -114,4 +114,6 @@ public abstract class Star {
     public boolean isVisited() {
         return visited;
     }
+
+
 }

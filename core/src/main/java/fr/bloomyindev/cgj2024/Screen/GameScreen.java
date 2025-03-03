@@ -143,12 +143,7 @@ public class GameScreen implements Screen {
         spaceship.updateSpeedCoords();
 
         GPS.updateIdClosestStar(true);
-
-        if (GPS.getClosestStar().isParasite() && GPS.getClosestStarRelative().getDistance() <= 10000) {
-            float parasiteYaw = GPS.getClosestStarRelative().getLng();
-            float speedToParasite = (-10f) / 10000f * (10000f - (float) GPS.getClosestStarRelative().getDistance());
-            spaceship.adjustMovement(parasiteYaw, speedToParasite);
-        }
+        updateParasiteStarAttraction();
 
         spaceship.move();
 
@@ -173,6 +168,14 @@ public class GameScreen implements Screen {
                     setVisit(star, i);
                 }
             }
+        }
+    }
+
+    private void updateParasiteStarAttraction() {
+        if (GPS.getClosestStar().isParasite() && GPS.getClosestStarRelative().getDistance() <= 10000) {
+            float parasiteYaw = GPS.getClosestStarRelative().getLng();
+            float speedToParasite = (-10f) / 10000f * (10000f - (float) GPS.getClosestStarRelative().getDistance());
+            spaceship.adjustMovement(parasiteYaw, speedToParasite);
         }
     }
 
@@ -247,7 +250,7 @@ public class GameScreen implements Screen {
 
     private void drawGPS() {
         GPS.updateSpaceshipRelClosestStar();
-        if (GPS.shipMovesAway(spaceship)) {
+        if (GPS.shipMovesAway(spaceship) && GPS.getClosestStarRelative().getDistance() <= 40000) {
             long[] theoricalDistances = GPS.getTheoricalDistances(spaceship);
             if (GPS.getBestDistance(theoricalDistances) == 0) {
                 leftSprite.draw(game.sprite);

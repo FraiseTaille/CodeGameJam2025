@@ -28,7 +28,7 @@ public final class StarManagement {
                     200000, 0, 0);
                 Star star;
                 if (i <= 10) {
-                    star = new ParasiteStar(coordinates, 1);
+                    star = new TrueStar(coordinates, 1);
                 } else {
                     star = new ParasiteStar(coordinates, 1);
                 }
@@ -60,7 +60,7 @@ public final class StarManagement {
     }
 
     public static void generateStarsInDelimitedZone(Spaceship spaceship, FieldOfView fov) {
-        float[] newZone20kX20k = spaceship.getSpaceshipCoord().get20kX20kZone();
+        float[] newZone20kX20k = spaceship.getSpaceshipCoord().getZone(10000);
         if (zone20kX20k[0] == 0 && zone20kX20k[1] == 0 && zone20kX20k[2] == 0 && zone20kX20k[3] == 0 || backToCenter) {
             zone20kX20k = newZone20kX20k;
             if (backToCenter) {

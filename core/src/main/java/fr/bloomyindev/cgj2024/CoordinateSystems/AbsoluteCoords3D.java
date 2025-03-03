@@ -56,24 +56,28 @@ public class AbsoluteCoords3D {
 		this.z = 0.f;
 	}
 
-    public float[] get20kX20kZone() {
-        return new float[]{x - 10000, x + 10000, y - 10000, y + 10000};
+    public float[] getZone(float radius) {
+        return new float[]{x - radius, x + radius, y - radius, y + radius};
     }
 
-    public boolean identicalZones(float[] other20kX20kZone) {
-        if (other20kX20kZone.length != 4) {
+    public boolean identicalZones(float[] otherZone) {
+        if (otherZone.length != 4) {
             return false;
         } else {
             boolean identical = true;
             int i = 0;
-            while (i < get20kX20kZone().length && identical) {
-                if (get20kX20kZone()[i] != other20kX20kZone[i]) {
+            while (i < getZone(getZoneRadius(otherZone)).length && identical) {
+                if (getZone(getZoneRadius(otherZone))[i] != otherZone[i]) {
                     identical = false;
                 }
                 i++;
             }
             return identical;
         }
+    }
+
+    public float getZoneRadius(float[] zone) {
+        return (zone[0] - zone[1]) / 2;
     }
 
     public boolean isInZone(float[] zone) {
